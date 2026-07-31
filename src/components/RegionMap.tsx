@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useState } from "react";
 import { REGIONS, type Region } from "@/lib/regions";
 import {
   GB_PATH,
@@ -10,15 +13,19 @@ import {
   WALES_BORDER_PATH,
   graticule,
   project,
+  unproject,
 } from "@/lib/geo";
+import { useRegionHighlight } from "@/components/RegionHighlight";
+import { usePassport } from "@/hooks/usePassport";
+import { CoordinateReadout, MapLegend } from "@/components/MapLegend";
 
 /**
  * ============================================================
  * STYLISED ORDNANCE SURVEY PLOT
  * ============================================================
- * The coastline and the pins are projected through the same function
- * from real latitude/longitude (see lib/geo.ts), so they cannot drift
- * out of agreement with each other.
+ * The coastline, borders and pins are projected through the same function
+ * from real latitude/longitude (see lib/geo.ts), so they cannot drift out
+ * of agreement with each other.
  *
  * On interaction: the pins are real <Link>s inside a <ul>, laid over the
  * SVG rather than drawn inside it. That is deliberate —
@@ -27,15 +34,13 @@ import {
  *   - Screen readers get "list, 12 items" and can jump between them.
  *   - Links behave like links: middle-click, open-in-new-tab, copy address.
  *
- * SVG <a> elements can be made to work, but focus rings and hit areas
- * inside a scaled viewBox are a fight not worth having.
+ * Hover *and focus* both drive the highlight that lights up the matching
+ * departure-board row. Hover alone would make the connection a mouse-only
+ * flourish.
  *
  * The contour and grid layers are pure texture behind aria-hidden nodes —
  * no information is encoded in them, which matters because the contour
  * brown fails text contrast by design (2.35:1).
- *
- * A stylised plot cannot convey precise geography, so the same regions
- * are also listed as ordinary text below the map.
  */
 
 const { verticals, horizontals } = graticule();
@@ -76,6 +81,10 @@ function labelClasses(side: Region["labelSide"]): string {
 }
 
 export function RegionMap() {
+  const { highlighted, setHighlighted } = useRegionHighlight();
+  const { has } = usePassport();
+  const [cursor, setCursor] = useState<{ lat: number; lon: number } | null>(null);
+
   return (
     <section aria-labelledby="map-heading">
       <h2
@@ -86,7 +95,8 @@ export function RegionMap() {
       </h2>
       <p className="mt-2 max-w-prose text-sm text-ink-soft">
         Twelve regions, each with its own food, festivals and weather. Pick one
-        from the plot, or from the list beneath it.
+        from the plot, or from the list beneath it. Hovering a pin also
+        highlights its row on the board above.
       </p>
 
       <div className="mt-5 rounded-lg border-2 border-grid/50 bg-paper-alt p-3 sm:p-5">
@@ -97,6 +107,16 @@ export function RegionMap() {
             maxWidth: 560,
             aspectRatio: `${VIEW_WIDTH} / ${VIEW_HEIGHT}`,
           }}
+          onPointerMove={(event) => {
+            const box = event.currentTarget.getBoundingClientRect();
+            setCursor(
+              unproject(
+                (event.clientX - box.left) / box.width,
+                (event.clientY - box.top) / box.height,
+              ),
+            );
+          }}
+          onPointerLeave={() => setCursor(null)}
         >
           <svg
             aria-hidden="true"
@@ -151,9 +171,7 @@ export function RegionMap() {
 
             {/*
               Decorative contour rings, clipped to land and placed over the
-              upland areas they gesture at — the Highlands, Snowdonia, the
-              Pennines, Dartmoor. Kept faint and rotated so they read as
-              relief shading rather than a set of bullseyes.
+              upland areas they gesture at.
             */}
             <g
               clipPath="url(#land-clip)"
@@ -204,6 +222,8 @@ export function RegionMap() {
           <ul className="absolute inset-0 m-0 list-none p-0">
             {REGIONS.map((region) => {
               const { x, y } = project(region.lat, region.lon);
+              const isHot = highlighted === region.slug;
+              const visited = has(region.slug);
               return (
                 <li
                   key={region.slug}
@@ -216,20 +236,32 @@ export function RegionMap() {
                 >
                   <Link
                     href={`/region/${region.slug}`}
+                    onPointerEnter={() => setHighlighted(region.slug)}
+                    onPointerLeave={() => setHighlighted(null)}
+                    onFocus={() => setHighlighted(region.slug)}
+                    onBlur={() => setHighlighted(null)}
                     className="group relative flex h-11 w-11 items-center justify-center"
                   >
                     {/* 44px hit area (SC 2.5.8 Target Size) with a small pin. */}
                     <span
                       aria-hidden="true"
-                      className="h-2.5 w-2.5 rounded-full border-2 border-paper bg-postbox shadow-sm transition-transform group-hover:scale-150 group-focus-visible:scale-150"
+                      className={`rounded-full border-2 border-paper shadow-sm transition-transform ${
+                        visited
+                          ? "h-3 w-3 bg-postbox-deep ring-2 ring-postbox/40"
+                          : "h-2.5 w-2.5 bg-postbox"
+                      } ${isHot ? "scale-150" : "group-hover:scale-150 group-focus-visible:scale-150"}`}
                     />
                     <span
-                      className={`pointer-events-none absolute whitespace-nowrap rounded-xs bg-paper/95 px-1 py-0.5 font-mono text-[0.55rem] font-semibold uppercase tracking-wider text-ink group-hover:bg-postbox group-hover:text-paper ${labelClasses(
-                        region.labelSide,
-                      )}`}
+                      className={`pointer-events-none absolute whitespace-nowrap rounded-xs px-1 py-0.5 font-mono text-[0.55rem] font-semibold uppercase tracking-wider ${
+                        isHot
+                          ? "bg-postbox text-paper"
+                          : "bg-paper/95 text-ink group-hover:bg-postbox group-hover:text-paper"
+                      } ${labelClasses(region.labelSide)}`}
                     >
                       {region.boardName}
                     </span>
+                    {/* Stamp state in words, for anyone not seeing the ring. */}
+                    {visited && <span className="sr-only"> — visited</span>}
                   </Link>
                 </li>
               );
@@ -237,9 +269,19 @@ export function RegionMap() {
           </ul>
         </div>
 
-        <p className="mt-3 text-center font-mono text-[0.6rem] uppercase tracking-wider text-ink-soft">
-          Not to scale · Ireland shown for context · border approximate
-        </p>
+        <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
+          <p className="font-mono text-[0.6rem] uppercase tracking-wider text-ink-soft">
+            Not to scale · Ireland shown for context · border approximate
+          </p>
+          <CoordinateReadout
+            lat={cursor?.lat ?? null}
+            lon={cursor?.lon ?? null}
+          />
+        </div>
+
+        <div className="mt-4">
+          <MapLegend />
+        </div>
       </div>
 
       {/* The non-spatial equivalent. Not a fallback — a peer. */}
@@ -251,9 +293,16 @@ export function RegionMap() {
           <li key={region.slug}>
             <Link
               href={`/region/${region.slug}`}
+              onPointerEnter={() => setHighlighted(region.slug)}
+              onPointerLeave={() => setHighlighted(null)}
+              onFocus={() => setHighlighted(region.slug)}
+              onBlur={() => setHighlighted(null)}
               className="flex items-baseline justify-between gap-2 rounded-md border border-grid/40 bg-paper px-3 py-2 transition-colors hover:border-postbox hover:bg-paper-alt"
             >
-              <span className="font-semibold text-ink">{region.name}</span>
+              <span className="font-semibold text-ink">
+                {region.name}
+                {has(region.slug) && <span className="sr-only"> — visited</span>}
+              </span>
               <span className="font-mono text-[0.65rem] uppercase tracking-wider text-ink-soft">
                 {region.nation}
               </span>

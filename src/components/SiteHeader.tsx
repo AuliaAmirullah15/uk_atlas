@@ -26,6 +26,14 @@ export function SiteHeader() {
             </li>
             <li>
               <Link
+                href="/quiz"
+                className="text-ink hover:text-postbox-deep hover:underline"
+              >
+                Quiz
+              </Link>
+            </li>
+            <li>
+              <Link
                 href="/about"
                 className="text-ink hover:text-postbox-deep hover:underline"
               >

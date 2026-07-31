@@ -37,6 +37,22 @@ export function project(lat: number, lon: number): { x: number; y: number } {
   return { x, y };
 }
 
+/**
+ * Inverse of `project`, for turning a pointer position back into
+ * coordinates. Takes fractions of the plot area (0–1) rather than viewBox
+ * units, because that is what a pointer event gives you after dividing by
+ * the element's rendered size — which is not the viewBox size.
+ */
+export function unproject(
+  xFraction: number,
+  yFraction: number,
+): { lat: number; lon: number } {
+  return {
+    lon: LON_MIN + xFraction * (LON_MAX - LON_MIN),
+    lat: LAT_MAX - yFraction * (LAT_MAX - LAT_MIN),
+  };
+}
+
 /** [lat, lon] pairs. */
 type Coord = [number, number];
 

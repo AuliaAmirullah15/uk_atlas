@@ -266,7 +266,9 @@ export const REGIONS: Region[] = [
     city: "Norwich",
     lat: 52.6309,
     lon: 1.2974,
-    labelSide: "right",
+    // Left, not right: Norwich is the easternmost pin, so a right-hand label
+    // runs off the sheet and drags the whole page into horizontal scroll.
+    labelSide: "left",
     blurb:
       "Big skies, lonely saltmarsh, and a university city where the chapel fan vaulting is the widest in the world.",
     phrase: { text: "Do different", gloss: "Norfolk's unofficial motto" },

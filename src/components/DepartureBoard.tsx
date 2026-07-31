@@ -5,6 +5,7 @@ import { useRef, useState, useSyncExternalStore } from "react";
 import { REGIONS } from "@/lib/regions";
 import { useWeatherStream, type ConnectionStatus } from "@/hooks/useWeatherStream";
 import { SplitFlap } from "@/components/SplitFlap";
+import { useRegionHighlight } from "@/components/RegionHighlight";
 import type { Observation } from "@/lib/weather/observations";
 
 /**
@@ -92,6 +93,8 @@ function BoardRow({
   slug,
   observation,
   nowSeconds,
+  highlighted,
+  onHighlight,
   onSettled,
 }: {
   boardName: string;
@@ -99,6 +102,8 @@ function BoardRow({
   slug: string;
   observation: Observation | undefined;
   nowSeconds: number;
+  highlighted: boolean;
+  onHighlight: (slug: string | null) => void;
   onSettled: (slug: string, sentence: string) => void;
 }) {
   const stale =
@@ -120,10 +125,28 @@ function BoardRow({
   };
 
   return (
-    <tr className="border-b border-flap/10 last:border-0">
-      <th scope="row" className="py-2 pr-3 text-left align-middle font-normal">
+    <tr
+      /*
+        aria-current marks the linked row for assistive tech, so the
+        map↔board connection is not conveyed by the red edge alone.
+      */
+      aria-current={highlighted ? "true" : undefined}
+      className={`border-b border-flap/10 transition-colors last:border-0 ${
+        highlighted ? "bg-flap/8" : ""
+      }`}
+    >
+      <th
+        scope="row"
+        className={`py-2 pr-3 text-left align-middle font-normal transition-shadow ${
+          highlighted ? "shadow-[inset_3px_0_0_0_var(--color-postbox)] pl-2" : ""
+        }`}
+      >
         <Link
           href={`/region/${slug}`}
+          onPointerEnter={() => onHighlight(slug)}
+          onPointerLeave={() => onHighlight(null)}
+          onFocus={() => onHighlight(slug)}
+          onBlur={() => onHighlight(null)}
           className="group inline-flex flex-col gap-1 rounded-sm"
         >
           <SplitFlap value={boardName} width={11} onSettled={handleSettled} />
@@ -159,6 +182,7 @@ function BoardRow({
 export function DepartureBoard() {
   const { observations, status, offset, lastUpdateAt, paused, togglePaused } =
     useWeatherStream();
+  const { highlighted, setHighlighted } = useRegionHighlight();
   const [announcement, setAnnouncement] = useState("");
   const pending = useRef(new Map<string, string>());
   const flushTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -247,6 +271,8 @@ export function DepartureBoard() {
                 regionName={region.name}
                 observation={observations.get(region.slug)}
                 nowSeconds={nowSeconds}
+                highlighted={highlighted === region.slug}
+                onHighlight={setHighlighted}
                 onSettled={handleSettled}
               />
             ))}

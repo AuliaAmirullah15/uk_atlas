@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { REGIONS, getRegion } from "@/lib/regions";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { StampOnVisit } from "@/components/PassportPanel";
 
 /** All twelve regions are known at build time, so prerender the lot. */
 export function generateStaticParams() {
@@ -55,6 +56,10 @@ export default async function RegionPage({
 
   return (
     <>
+      {/* Records the visit in the local passport. Renders nothing, and is
+          the only client-side leaf on this otherwise prerendered page. */}
+      <StampOnVisit slug={region.slug} />
+
       <SiteHeader />
 
       <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">

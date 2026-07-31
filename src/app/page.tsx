@@ -1,5 +1,9 @@
+import Link from "next/link";
 import { DepartureBoard } from "@/components/DepartureBoard";
 import { RegionMap } from "@/components/RegionMap";
+import { RegionHighlightProvider } from "@/components/RegionHighlight";
+import { PassportPanel } from "@/components/PassportPanel";
+import { SconeAllegiance } from "@/components/SconeAllegiance";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 
@@ -24,12 +28,32 @@ export default function Home() {
           for every region — plus live weather, streamed.
         </p>
 
-        <div className="mt-10">
-          <DepartureBoard />
-        </div>
+        <p className="mt-6">
+          <Link
+            href="/quiz"
+            className="inline-block rounded-md bg-postbox px-5 py-2.5 font-semibold text-paper transition-colors hover:bg-postbox-deep"
+          >
+            Find the region that suits you →
+          </Link>
+        </p>
 
-        <div className="mt-14">
-          <RegionMap />
+        {/*
+          The provider wraps both board and map so hovering or focusing a pin
+          can light up the matching board row.
+        */}
+        <RegionHighlightProvider>
+          <div className="mt-10">
+            <DepartureBoard />
+          </div>
+
+          <div className="mt-14">
+            <RegionMap />
+          </div>
+        </RegionHighlightProvider>
+
+        <div className="mt-14 grid gap-5 lg:grid-cols-2 lg:items-start">
+          <PassportPanel />
+          <SconeAllegiance />
         </div>
       </main>
 
