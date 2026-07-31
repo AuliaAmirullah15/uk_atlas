@@ -1,0 +1,44 @@
+# Phase 2 broker. Redpanda rather than Apache Kafka: it speaks the same
+# wire protocol, needs no ZooKeeper/KRaft ceremony, and starts in seconds
+# on a laptop — which matters when the broker is a portfolio detail rather
+# than the product.
+#
+#   docker compose -f docker-compose.kafka.yml up -d
+#   npm install kafkajs
+#   STREAM_BACKEND=kafka npm run dev
+#
+# Console at http://localhost:8080 to watch records land on the topic.
+
+services:
+  redpanda:
+    image: redpandadata/redpanda:v24.2.7
+    container_name: uk-atlas-redpanda
+    command:
+      - redpanda
+      - start
+      - --smp=1
+      - --memory=1G
+      - --overprovisioned
+      - --node-id=0
+      - --check=false
+      - --kafka-addr=PLAINTEXT://0.0.0.0:29092,OUTSIDE://0.0.0.0:9092
+      - --advertise-kafka-addr=PLAINTEXT://redpanda:29092,OUTSIDE://localhost:9092
+    ports:
+      - "9092:9092"
+      - "9644:9644"
+    healthcheck:
+      test: ["CMD-SHELL", "rpk cluster health | grep -E 'Healthy:.+true'"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  console:
+    image: redpandadata/console:v2.7.2
+    container_name: uk-atlas-redpanda-console
+    depends_on:
+      redpanda:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      KAFKA_BROKERS: redpanda:29092

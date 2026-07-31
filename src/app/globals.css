@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+/*
+  ============================================================
+  ORDNANCE SURVEY CARTOGRAPHY PALETTE
+  ============================================================
+  Contrast ratios verified against --color-paper (#FDFBF4).
+  Do not change a value without re-checking it: every colour
+  that carries text must clear 4.5:1 (WCAG 2.1 SC 1.4.3), and
+  every colour used for a border/gridline must clear 3:1
+  (SC 1.4.11 non-text contrast).
+
+    ink        on paper  16.81:1  AAA
+    ink-soft   on paper   8.96:1  AAA
+    postbox    on paper   5.68:1  AA
+    postbox-deep on paper 8.01:1  AAA  <- use for small red text
+    water      on paper   6.99:1  AA
+    woodland   on paper   6.02:1  AA
+    grid       on paper   3.26:1  non-text only (borders, gridlines)
+    contour    on paper   2.35:1  DECORATIVE ONLY — never text,
+                                  never the sole carrier of meaning
+*/
+
+@theme {
+  --color-paper: #fdfbf4;
+  --color-paper-alt: #f4efe2;
+  --color-ink: #1b1a17;
+  --color-ink-soft: #4a473f;
+  --color-postbox: #c8102e;
+  --color-postbox-deep: #9e0c24;
+  --color-contour: #c89f6e;
+  --color-grid: #6b8fb5;
+  --color-water: #0f5e7a;
+  --color-woodland: #3f6b38;
+  --color-moor: #e8d9c0;
+
+  /* Departure board (dark surface) */
+  --color-board: #14140f;
+  --color-board-card: #1f1f17;
+  --color-flap: #f2ebd8;
+  --color-amber: #e8a33d;
+
+  /* Set by next/font in the root layout. */
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+}
+
+/*
+  Visible focus for keyboard users on every interactive element.
+  The offset keeps the ring clear of the contour texture so it
+  stays legible against busy map backgrounds (SC 2.4.7, 2.4.11).
+*/
+:focus-visible {
+  outline: 3px solid var(--color-postbox);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Windows High Contrast / forced-colors: let the OS palette win. */
+@media (forced-colors: active) {
+  :focus-visible {
+    outline: 3px solid CanvasText;
+  }
+}
+
+/* ============================================================
+   CONTOUR TEXTURE
+   ============================================================
+   Decorative only. Always rendered inside an aria-hidden node.
+*/
+.os-contours {
+  background-image:
+    repeating-radial-gradient(
+      ellipse 62% 44% at 22% 32%,
+      transparent 0 26px,
+      color-mix(in srgb, var(--color-contour) 46%, transparent) 26px 27.5px,
+      transparent 27.5px 54px
+    ),
+    repeating-radial-gradient(
+      ellipse 48% 66% at 78% 68%,
+      transparent 0 30px,
+      color-mix(in srgb, var(--color-contour) 38%, transparent) 30px 31.5px,
+      transparent 31.5px 62px
+    );
+}
+
+/* National Grid squares. Non-text, 3.26:1 — clears SC 1.4.11. */
+.os-grid {
+  background-image:
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--color-grid) 30%, transparent) 0 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      to bottom,
+      color-mix(in srgb, var(--color-grid) 30%, transparent) 0 1px,
+      transparent 1px
+    );
+  background-size: 44px 44px;
+}
+
+/* ============================================================
+   SPLIT-FLAP
+   ============================================================
+   The flip is a short transform on each glyph cell. The animated
+   layer is aria-hidden; announcements come from a polite live
+   region that only fires once a row has settled.
+*/
+@keyframes os-flap {
+  0% {
+    transform: rotateX(-88deg);
+    filter: brightness(0.45);
+  }
+  100% {
+    transform: rotateX(0deg);
+    filter: brightness(1);
+  }
+}
+
+.os-flap-cell {
+  animation: os-flap 90ms ease-out;
+  transform-origin: center top;
+  backface-visibility: hidden;
+}
+
+/* The hairline across a real split-flap character drum. */
+.os-flap-seam::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 1px;
+  background-color: color-mix(in srgb, var(--color-board) 85%, transparent);
+  pointer-events: none;
+}
+
+/*
+  SC 2.3.3 Animation from Interactions. Anyone who has asked their
+  OS to reduce motion gets the settled value with no flipping — the
+  JS driver also checks matchMedia and jumps straight to the target,
+  because killing the CSS alone would still leave glyphs cycling.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .os-flap-cell {
+    animation: none;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+  }
+}

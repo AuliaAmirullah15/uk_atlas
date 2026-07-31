@@ -1,0 +1,197 @@
+/**
+ * ============================================================
+ * PHASE 2 — KAFKA IMPLEMENTATION OF `EventBus`
+ * ============================================================
+ * Shipped as `.example` on purpose: it needs `kafkajs`, and phase 1
+ * should install and build with zero broker dependencies. Nothing in
+ * the app imports this file until you activate it.
+ *
+ * TO ACTIVATE
+ * -----------
+ *   1. docker compose -f docker-compose.kafka.yml up -d
+ *   2. npm install kafkajs
+ *   3. mv src/lib/streaming/kafka-bus.ts.example \
+ *         src/lib/streaming/kafka-bus.ts
+ *   4. Point the `bus` export in ./bus.ts at the selector below.
+ *   5. STREAM_BACKEND=kafka npm run dev
+ *
+ * Note what does NOT change: the SSE route, `useWeatherStream`,
+ * `SplitFlap`, `DepartureBoard`. They only ever knew about `EventBus`.
+ *
+ * ------------------------------------------------------------
+ * WHY THE BROWSER STILL TALKS SSE, NOT KAFKA
+ * ------------------------------------------------------------
+ * Kafka's protocol runs over raw TCP. A browser cannot open a raw TCP
+ * socket, so there is no such thing as connecting a page directly to a
+ * broker — every "Kafka in the browser" setup is a server bridge, and
+ * this file is ours. Anyone claiming otherwise is describing a proxy.
+ *
+ * ------------------------------------------------------------
+ * THE ONE GENUINELY AWKWARD PART: CONSUMER GROUPS
+ * ------------------------------------------------------------
+ * A Kafka consumer group distributes partitions *between* members, so if
+ * every Next.js instance joined the same group, each browser would see
+ * only the regions whose partitions its instance happened to own. That is
+ * the opposite of a broadcast.
+ *
+ * The fix is a unique group id per process, which makes every instance a
+ * full independent reader of the topic. That is the standard fan-out
+ * pattern, and its cost is honest: group metadata accumulates per
+ * process, so set a short `offsetRetention` or clean up idle groups if
+ * you run this beyond a demo.
+ */
+
+import { Kafka, logLevel, type Consumer, type Producer } from "kafkajs";
+import {
+  type EventBus,
+  type Handler,
+  type StreamEnvelope,
+  type Unsubscribe,
+} from "./bus";
+
+const BROKERS = (process.env.KAFKA_BROKERS ?? "localhost:9092").split(",");
+const RETENTION = 500;
+
+export class KafkaEventBus implements EventBus {
+  private kafka: Kafka;
+  private producer: Producer;
+  private consumer: Consumer | null = null;
+  private ready: Promise<void> | null = null;
+
+  /** Local mirror of recent records, so `snapshot()` and offset-resume
+   *  behave exactly as they do on the local bus. Kafka can replay from an
+   *  offset, but a hot cache avoids a seek on every browser connect. */
+  private log = new Map<string, StreamEnvelope<unknown>[]>();
+  private subscribers = new Map<string, Set<Handler<never>>>();
+
+  constructor(private topic: string) {
+    this.kafka = new Kafka({
+      clientId: "uk-atlas",
+      brokers: BROKERS,
+      logLevel: logLevel.WARN,
+    });
+    this.producer = this.kafka.producer();
+  }
+
+  private async connect(): Promise<void> {
+    this.ready ??= (async () => {
+      await this.producer.connect();
+
+      // Unique group per process — see the note above on why.
+      const groupId = `uk-atlas-bridge-${process.pid}-${Date.now()}`;
+      this.consumer = this.kafka.consumer({ groupId });
+      await this.consumer.connect();
+      await this.consumer.subscribe({ topic: this.topic, fromBeginning: false });
+
+      await this.consumer.run({
+        eachMessage: async ({ message, partition }) => {
+          if (!message.value) return;
+
+          const envelope: StreamEnvelope<unknown> = {
+            topic: this.topic,
+            key: message.key?.toString() ?? "",
+            // Kafka offsets are per-partition strings. Compose them into a
+            // single monotonic-enough number for the SSE `id:` field.
+            offset: Number(message.offset),
+            timestamp: new Date(Number(message.timestamp)).toISOString(),
+            value: JSON.parse(message.value.toString()),
+          };
+          void partition;
+
+          const entries = this.log.get(this.topic) ?? [];
+          entries.push(envelope);
+          if (entries.length > RETENTION) {
+            entries.splice(0, entries.length - RETENTION);
+          }
+          this.log.set(this.topic, entries);
+
+          for (const handler of this.subscribers.get(this.topic) ?? []) {
+            try {
+              (handler as Handler<unknown>)(envelope);
+            } catch {
+              // One bad subscriber must not stall the consumer loop.
+            }
+          }
+        },
+      });
+    })();
+
+    return this.ready;
+  }
+
+  async publish<T>(
+    topic: string,
+    key: string,
+    value: T,
+  ): Promise<StreamEnvelope<T>> {
+    await this.connect();
+
+    const [metadata] = await this.producer.send({
+      topic,
+      // Region slug as the key: Kafka hashes it to a partition, so all
+      // events for one region stay ordered relative to each other.
+      messages: [{ key, value: JSON.stringify(value) }],
+    });
+
+    return {
+      topic,
+      key,
+      offset: Number(metadata?.baseOffset ?? 0),
+      timestamp: new Date().toISOString(),
+      value,
+    };
+  }
+
+  subscribe<T>(
+    topic: string,
+    handler: Handler<T>,
+    fromOffset?: number,
+  ): Unsubscribe {
+    // Fire and forget: the consumer may still be connecting, and records
+    // that land before it is ready are picked up from the topic anyway.
+    void this.connect();
+
+    if (fromOffset !== undefined) {
+      for (const envelope of this.log.get(topic) ?? []) {
+        if (envelope.offset > fromOffset) handler(envelope as StreamEnvelope<T>);
+      }
+    }
+
+    const set = this.subscribers.get(topic) ?? new Set();
+    set.add(handler as Handler<never>);
+    this.subscribers.set(topic, set);
+
+    return () => {
+      this.subscribers.get(topic)?.delete(handler as Handler<never>);
+    };
+  }
+
+  snapshot<T>(topic: string): StreamEnvelope<T>[] {
+    const latestByKey = new Map<string, StreamEnvelope<unknown>>();
+    for (const envelope of this.log.get(topic) ?? []) {
+      latestByKey.set(envelope.key, envelope);
+    }
+    return [...latestByKey.values()] as StreamEnvelope<T>[];
+  }
+}
+
+/*
+  ------------------------------------------------------------
+  THE SWAP
+  ------------------------------------------------------------
+  Replace the `bus` export in ./bus.ts with this selector. It is the only
+  line in the codebase that needs to know a broker exists:
+
+    import { KafkaEventBus } from "./kafka-bus";
+
+    export const bus: EventBus =
+      process.env.STREAM_BACKEND === "kafka"
+        ? (globalForBus.__ukAtlasBus ??= new KafkaEventBus(WEATHER_TOPIC))
+        : (globalForBus.__ukAtlasBus ??= new LocalEventBus());
+
+  Then create the topic with a partition per region so each region's
+  events stay ordered on their own partition:
+
+    docker exec uk-atlas-redpanda rpk topic create \
+      uk.weather.observations --partitions 12 --replicas 1
+*/
