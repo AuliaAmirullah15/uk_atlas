@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 
 function H2({ children }: { children: React.ReactNode }) {
   return (
-    <h2 className="mt-10 font-mono text-sm uppercase tracking-[0.2em] text-postbox-deep">
+    <h2 className="mt-10 font-mono text-sm uppercase tracking-[0.2em] text-brass">
       {children}
     </h2>
   );
@@ -23,7 +23,7 @@ export default function AboutPage() {
       <SiteHeader />
 
       <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
-        <h1 className="text-3xl font-bold tracking-tight text-ink">
+        <h1 className="font-display text-4xl font-semibold tracking-tight text-ink">
           About this atlas
         </h1>
 
@@ -68,11 +68,23 @@ export default function AboutPage() {
 
         <H2>Colour</H2>
         <p className="mt-3 text-ink-soft">
-          Every colour that carries text was checked against the paper
-          background before it went in: nothing textual sits below 4.5:1, and
-          most is above 7:1. The contour brown fails text contrast at 2.35:1,
-          which is why it is only ever texture — no information is encoded in
-          the contour lines or the grid squares alone.
+          The sheet is printed in brass and coral on midnight teal. Every
+          colour that carries text was measured against both page surfaces
+          before it went in: nothing textual sits below 4.5:1, and most is
+          above 7:1. Body copy is 14.3:1, secondary copy 8.8:1, and the brass
+          used for section labels 8.4:1.
+        </p>
+        <p className="mt-3 text-ink-soft">
+          Borders are the part people usually get wrong on a dark theme. A
+          hairline written as 40% of a pale colour composites down to roughly
+          2:1 and quietly fails the 3:1 that non-text contrast requires
+          (success criterion 1.4.11), so the rules here are solid tokens
+          measured at full opacity instead. The contour lines and the map&apos;s
+          land fill are the deliberate exceptions: both are low-contrast
+          texture inside aria-hidden nodes, and no information is encoded in
+          either — the coastline is drawn in brass at 7.1:1 against the water,
+          and every region on the plot is also a text entry in the list below
+          it.
         </p>
 
         <H2>Regions</H2>
@@ -86,7 +98,7 @@ export default function AboutPage() {
         <p className="mt-10">
           <Link
             href="/"
-            className="font-mono text-xs uppercase tracking-wider text-postbox-deep underline"
+            className="font-mono text-xs uppercase tracking-wider text-accent-bright underline"
           >
             ← Back to the map
           </Link>

@@ -36,15 +36,15 @@ export function QuizResult({
   const observation = observations.get(winner.region.slug);
 
   return (
-    <div className="rounded-lg border-2 border-grid/50 bg-paper-alt p-5 sm:p-7">
-      <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-soft">
+    <div className="rounded-lg border border-brass-dim bg-paper-alt p-5 sm:p-7">
+      <p className="font-mono text-xs uppercase tracking-[0.2em] text-brass">
         Your result
       </p>
 
       <h2
         ref={headingRef}
         tabIndex={-1}
-        className="mt-2 text-2xl font-bold tracking-tight text-ink sm:text-3xl"
+        className="mt-2 font-display text-3xl font-semibold tracking-tight text-ink sm:text-4xl"
       >
         You should go to {winner.region.name}
       </h2>
@@ -75,7 +75,7 @@ export function QuizResult({
 
       <p className="mt-5 max-w-prose text-ink-soft">{winner.region.blurb}</p>
 
-      <p className="mt-4 border-l-4 border-postbox pl-3 text-sm">
+      <p className="mt-4 border-l-4 border-accent pl-3 text-sm">
         <span className="font-semibold text-ink">
           &ldquo;{winner.region.phrase.text}&rdquo;
         </span>{" "}
@@ -85,7 +85,7 @@ export function QuizResult({
       {/* Eat this, essentially. */}
       <div className="mt-6 grid gap-5 sm:grid-cols-2">
         <div>
-          <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-postbox-deep">
+          <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-brass">
             Eat
           </h3>
           <ul className="mt-2 m-0 list-none p-0 text-sm">
@@ -97,7 +97,7 @@ export function QuizResult({
           </ul>
         </div>
         <div>
-          <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-postbox-deep">
+          <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-brass">
             Time it with
           </h3>
           <ul className="mt-2 m-0 list-none p-0 text-sm">
@@ -113,7 +113,7 @@ export function QuizResult({
 
       {runnersUp.length > 0 && (
         <div className="mt-6">
-          <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-ink-soft">
+          <h3 className="font-mono text-xs uppercase tracking-[0.2em] text-brass">
             Also worth a look
           </h3>
           <ul className="mt-2 m-0 flex list-none flex-wrap gap-2 p-0">
@@ -121,7 +121,7 @@ export function QuizResult({
               <li key={entry.region.slug}>
                 <Link
                   href={`/region/${entry.region.slug}`}
-                  className="inline-flex items-baseline gap-2 rounded-full border border-grid/50 bg-paper px-3 py-1 text-sm text-ink hover:border-postbox"
+                  className="inline-flex items-baseline gap-2 rounded-full border border-rule bg-paper px-3 py-1 text-sm text-ink hover:border-accent"
                 >
                   {entry.region.name}
                   <span className="font-mono text-[0.65rem] text-ink-soft">
@@ -138,14 +138,14 @@ export function QuizResult({
         <Link
           href={`/region/${winner.region.slug}`}
           onClick={() => stamp(winner.region.slug)}
-          className="rounded-md bg-postbox px-5 py-2 font-semibold text-paper transition-colors hover:bg-postbox-deep"
+          className="rounded-md bg-accent px-5 py-2 font-semibold text-paper transition-colors hover:bg-accent-bright"
         >
           Explore {winner.region.name}
         </Link>
         <button
           type="button"
           onClick={onRestart}
-          className="rounded-md border-2 border-grid/50 px-4 py-2 font-semibold text-ink transition-colors hover:border-grid"
+          className="rounded-md border-2 border-rule px-4 py-2 font-semibold text-ink transition-colors hover:border-rule-strong"
         >
           Start again
         </button>

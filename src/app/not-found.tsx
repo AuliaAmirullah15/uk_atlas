@@ -7,10 +7,10 @@ export default function NotFound() {
     <>
       <SiteHeader />
       <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-16 sm:px-6">
-        <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-soft">
+        <p className="font-mono text-xs uppercase tracking-[0.2em] text-brass">
           Off the edge of the sheet
         </p>
-        <h1 className="mt-3 text-3xl font-bold tracking-tight text-ink">
+        <h1 className="mt-3 font-display text-4xl font-semibold tracking-tight text-ink">
           There is no map for that
         </h1>
         <p className="mt-4 text-ink-soft">
@@ -20,7 +20,7 @@ export default function NotFound() {
         <p className="mt-8">
           <Link
             href="/"
-            className="inline-block rounded-md bg-postbox px-4 py-2 font-semibold text-paper hover:bg-postbox-deep"
+            className="inline-block rounded-md bg-accent px-4 py-2 font-semibold text-paper hover:bg-accent-bright"
           >
             Back to the map
           </Link>

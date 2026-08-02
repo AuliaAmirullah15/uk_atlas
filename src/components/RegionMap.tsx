@@ -39,8 +39,13 @@ import { CoordinateReadout, MapLegend } from "@/components/MapLegend";
  * flourish.
  *
  * The contour and grid layers are pure texture behind aria-hidden nodes —
- * no information is encoded in them, which matters because the contour
- * brown fails text contrast by design (2.35:1).
+ * no information is encoded in them, which is what lets them be drawn at
+ * the low opacities the relief effect needs.
+ *
+ * The whole SVG is aria-hidden and role="presentation": the land and sea
+ * fills sit close together on purpose, and the shape is carried by a brass
+ * coastline rather than by the fill difference. Nothing informational rests
+ * on that, because every pin is also a text entry in the list beneath.
  */
 
 const { verticals, horizontals } = graticule();
@@ -89,7 +94,7 @@ export function RegionMap() {
     <section aria-labelledby="map-heading">
       <h2
         id="map-heading"
-        className="font-mono text-sm uppercase tracking-[0.2em] text-ink-soft"
+        className="font-mono text-sm uppercase tracking-[0.2em] text-brass"
       >
         Sheet 1 — The United Kingdom
       </h2>
@@ -99,7 +104,7 @@ export function RegionMap() {
         highlights its row on the board above.
       </p>
 
-      <div className="mt-5 rounded-lg border-2 border-grid/50 bg-paper-alt p-3 sm:p-5">
+      <div className="mt-5 rounded-lg border border-brass-dim bg-paper-alt p-3 sm:p-5">
         <div
           className="relative mx-auto"
           style={{
@@ -132,17 +137,17 @@ export function RegionMap() {
               </clipPath>
             </defs>
 
-            {/* Sea tint — pale OS blue, not the greenish cast a low-opacity
-                water blue picks up over the cream paper. */}
+            {/* Sea — the barest teal lift off the page ground, so the water
+                reads as open space and the brass coastline does the work. */}
             <rect
               width={VIEW_WIDTH}
               height={VIEW_HEIGHT}
               fill="var(--color-grid)"
-              opacity="0.16"
+              opacity="0.1"
             />
 
             {/* Graticule, one line per whole degree. */}
-            <g stroke="var(--color-grid)" strokeWidth="0.6" opacity="0.32">
+            <g stroke="var(--color-grid)" strokeWidth="0.6" opacity="0.28">
               {verticals.map((x) => (
                 <line key={`v${x}`} x1={x} y1={0} x2={x} y2={VIEW_HEIGHT} />
               ))}
@@ -151,22 +156,28 @@ export function RegionMap() {
               ))}
             </g>
 
-            {/* Landmass. Ireland sits lighter: it is drawn for geographic
-                honesty, but only Northern Ireland is covered here. */}
+            {/*
+              Landmass. The fills sit close to the sea on purpose — the
+              coastline is drawn in brass at full strength (7.1:1 against the
+              water, 5.2:1 against the land) and that line is what defines the
+              shape, the way a gold-line chart works. Ireland sits lighter and
+              is outlined in slate rather than brass: it is drawn for
+              geographic honesty, but only Northern Ireland is covered here.
+            */}
             <path
               d={IRELAND_PATH}
               fill="var(--color-moor)"
-              opacity="0.5"
+              opacity="0.45"
               stroke="var(--color-ink-soft)"
-              strokeWidth="1.2"
-              strokeOpacity="0.35"
+              strokeWidth="1.1"
+              strokeOpacity="0.4"
             />
             <path
               d={GB_PATH}
               fill="var(--color-moor)"
-              stroke="var(--color-ink)"
-              strokeWidth="1.6"
-              strokeOpacity="0.55"
+              stroke="var(--color-brass)"
+              strokeWidth="1.4"
+              strokeOpacity="0.85"
             />
 
             {/*
@@ -178,7 +189,7 @@ export function RegionMap() {
               stroke="var(--color-contour)"
               strokeWidth="0.7"
               fill="none"
-              opacity="0.4"
+              opacity="0.5"
             >
               {UPLANDS.map((upland, index) =>
                 Array.from({ length: upland.rings }, (_, i) => (
@@ -206,15 +217,15 @@ export function RegionMap() {
               <path d={WALES_BORDER_PATH} />
             </g>
 
-            {/* Approximate NI border, in postbox red to mark it as a UK
-                boundary rather than an internal one. */}
+            {/* Approximate NI border, in coral to mark it as a UK boundary
+                rather than an internal one. */}
             <path
               d={NI_BORDER_PATH}
               fill="none"
-              stroke="var(--color-postbox-deep)"
+              stroke="var(--color-accent-bright)"
               strokeWidth="1.4"
               strokeDasharray="5 4"
-              opacity="0.7"
+              opacity="0.85"
             />
           </svg>
 
@@ -247,15 +258,15 @@ export function RegionMap() {
                       aria-hidden="true"
                       className={`rounded-full border-2 border-paper shadow-sm transition-transform ${
                         visited
-                          ? "h-3 w-3 bg-postbox-deep ring-2 ring-postbox/40"
-                          : "h-2.5 w-2.5 bg-postbox"
+                          ? "h-3 w-3 bg-accent-bright ring-2 ring-accent/40"
+                          : "h-2.5 w-2.5 bg-accent"
                       } ${isHot ? "scale-150" : "group-hover:scale-150 group-focus-visible:scale-150"}`}
                     />
                     <span
                       className={`pointer-events-none absolute whitespace-nowrap rounded-xs px-1 py-0.5 font-mono text-[0.55rem] font-semibold uppercase tracking-wider ${
                         isHot
-                          ? "bg-postbox text-paper"
-                          : "bg-paper/95 text-ink group-hover:bg-postbox group-hover:text-paper"
+                          ? "bg-accent text-paper"
+                          : "bg-paper/95 text-ink group-hover:bg-accent group-hover:text-paper"
                       } ${labelClasses(region.labelSide)}`}
                     >
                       {region.boardName}
@@ -285,7 +296,7 @@ export function RegionMap() {
       </div>
 
       {/* The non-spatial equivalent. Not a fallback — a peer. */}
-      <h3 className="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-ink-soft">
+      <h3 className="mt-8 font-mono text-xs uppercase tracking-[0.2em] text-brass">
         All regions
       </h3>
       <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2 lg:grid-cols-3">
@@ -297,7 +308,7 @@ export function RegionMap() {
               onPointerLeave={() => setHighlighted(null)}
               onFocus={() => setHighlighted(region.slug)}
               onBlur={() => setHighlighted(null)}
-              className="flex items-baseline justify-between gap-2 rounded-md border border-grid/40 bg-paper px-3 py-2 transition-colors hover:border-postbox hover:bg-paper-alt"
+              className="flex items-baseline justify-between gap-2 rounded-md border border-rule bg-paper px-3 py-2 transition-colors hover:border-accent hover:bg-paper-alt"
             >
               <span className="font-semibold text-ink">
                 {region.name}

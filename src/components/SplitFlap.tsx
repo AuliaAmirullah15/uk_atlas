@@ -185,7 +185,12 @@ export function SplitFlap({
       {displayed.map((char, index) => (
         <span
           key={index}
-          className={`os-flap-seam relative inline-flex h-7 w-[0.95rem] items-center justify-center rounded-xs bg-board-card font-mono text-[0.8rem] font-semibold tabular-nums ${glyphColour} ${
+          /*
+            os-flap-face is the top-lit gradient a real drum has: highlight
+            above the seam, shadow below it. Purely a surface treatment — the
+            glyph colour is set from the token, not from the gradient.
+          */
+          className={`os-flap-seam os-flap-face relative inline-flex h-7 w-[0.95rem] items-center justify-center rounded-xs bg-board-card font-mono text-[0.8rem] font-semibold tabular-nums ${glyphColour} ${
             !reducedMotion && flipping[index] ? "os-flap-cell" : ""
           }`}
         >

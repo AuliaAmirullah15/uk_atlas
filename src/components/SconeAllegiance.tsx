@@ -41,11 +41,11 @@ export function SconeAllegiance() {
   return (
     <section
       aria-labelledby="scone-heading"
-      className="rounded-lg border-2 border-grid/50 bg-paper-alt p-5"
+      className="rounded-lg border border-brass-dim bg-paper-alt p-5"
     >
       <h2
         id="scone-heading"
-        className="font-mono text-sm uppercase tracking-[0.2em] text-ink-soft"
+        className="font-mono text-sm uppercase tracking-[0.2em] text-brass"
       >
         Declare yourself
       </h2>
@@ -57,7 +57,7 @@ export function SconeAllegiance() {
         A radiogroup rather than two independent buttons: these are mutually
         exclusive options with a current value, which is exactly what radio
         semantics describe. aria-checked carries the state, so it is never
-        conveyed by the red border alone.
+        conveyed by the coral border alone.
       */}
       <div
         role="radiogroup"
@@ -75,8 +75,8 @@ export function SconeAllegiance() {
               onClick={() => setChoice(selected ? null : option)}
               className={`rounded-md border-2 px-5 py-2.5 font-semibold transition-colors ${
                 selected
-                  ? "border-postbox bg-postbox text-paper"
-                  : "border-grid/50 bg-paper text-ink hover:border-grid"
+                  ? "border-accent bg-accent text-paper"
+                  : "border-rule bg-paper text-ink hover:border-rule-strong"
               }`}
             >
               {option === "jam" ? "Jam first" : "Cream first"}

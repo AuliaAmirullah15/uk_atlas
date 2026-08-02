@@ -18,24 +18,42 @@ export default function Home() {
           map are h2 sections beneath it, so the heading outline reads as a
           sensible table of contents in a screen reader's heading list.
         */}
-        <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-          A field guide to the twelve regions of the{" "}
-          <span className="text-postbox-deep">United Kingdom</span>
-        </h1>
-        <p className="mt-4 max-w-2xl text-base text-ink-soft">
-          Contour lines, postbox red, and a station board that will not stop
-          telling you it is drizzling somewhere. Food, festivals and landmarks
-          for every region — plus live weather, streamed.
-        </p>
+        {/*
+          The hero frame. Both decorative layers are aria-hidden and sit
+          behind a `relative` content wrapper, so the sunburst rays and the
+          corner brackets never enter the accessibility tree or the text flow.
+        */}
+        <div className="deco-corners relative overflow-hidden rounded-lg border border-rule bg-paper-alt px-5 py-8 sm:px-10 sm:py-12">
+          <div
+            aria-hidden="true"
+            className="deco-sunburst pointer-events-none absolute inset-0"
+          />
 
-        <p className="mt-6">
-          <Link
-            href="/quiz"
-            className="inline-block rounded-md bg-postbox px-5 py-2.5 font-semibold text-paper transition-colors hover:bg-postbox-deep"
-          >
-            Find the region that suits you →
-          </Link>
-        </p>
+          <div className="relative">
+            <p className="font-mono text-[0.7rem] uppercase tracking-[0.28em] text-brass">
+              Ordnance Survey · Night Edition
+            </p>
+
+            <h1 className="mt-4 max-w-3xl font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
+              A field guide to the twelve regions of the{" "}
+              <span className="text-brass italic">United Kingdom</span>
+            </h1>
+            <p className="mt-5 max-w-2xl text-base text-ink-soft">
+              Contour lines, brass hairlines, and a station board that will not
+              stop telling you it is drizzling somewhere. Food, festivals and
+              landmarks for every region — plus live weather, streamed.
+            </p>
+
+            <p className="mt-7">
+              <Link
+                href="/quiz"
+                className="inline-block rounded-md bg-accent px-5 py-2.5 font-semibold text-paper transition-colors hover:bg-accent-bright"
+              >
+                Find the region that suits you →
+              </Link>
+            </p>
+          </div>
+        </div>
 
         {/*
           The provider wraps both board and map so hovering or focusing a pin

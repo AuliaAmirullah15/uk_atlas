@@ -2,61 +2,125 @@
 
 /*
   ============================================================
-  ORDNANCE SURVEY CARTOGRAPHY PALETTE
+  MIDNIGHT DECO — "SHEET 1, NIGHT EDITION"
   ============================================================
-  Contrast ratios verified against --color-paper (#FDFBF4).
-  Do not change a value without re-checking it: every colour
-  that carries text must clear 4.5:1 (WCAG 2.1 SC 1.4.3), and
-  every colour used for a border/gridline must clear 3:1
-  (SC 1.4.11 non-text contrast).
+  Still an Ordnance Survey plot: contours, graticule, split-flap.
+  Printed on midnight teal in brass and coral instead of cream and
+  postbox red, so it reads like a 1930s railway poster rather than
+  a daytime map sheet.
 
-    ink        on paper  16.81:1  AAA
-    ink-soft   on paper   8.96:1  AAA
-    postbox    on paper   5.68:1  AA
-    postbox-deep on paper 8.01:1  AAA  <- use for small red text
-    water      on paper   6.99:1  AA
-    woodland   on paper   6.02:1  AA
-    grid       on paper   3.26:1  non-text only (borders, gridlines)
-    contour    on paper   2.35:1  DECORATIVE ONLY — never text,
-                                  never the sole carrier of meaning
+  Contrast ratios are measured, not estimated. Do not change a value
+  without re-checking it: every colour that carries text must clear
+  4.5:1 (WCAG 2.1 SC 1.4.3), and anything that identifies a component
+  or state must clear 3:1 (SC 1.4.11 non-text contrast).
+
+  Measured against --color-paper (#0B1E26) / --color-paper-alt (#122E37):
+
+    ink           14.28 / 11.91  AAA
+    ink-soft       8.82 /  7.36  AAA
+    accent-bright  8.59 /  7.17  AAA  <- use for small coral text
+    accent         6.02 /  5.02  AA   <- pill fills; dark text on it is 6.02
+    brass          8.37 /  6.98  AAA
+    woodland       8.85 /  7.38  AAA
+    water          7.62 /  6.36  AAA
+    rule           3.68 /  3.07  non-text only (borders, dividers)
+    rule-strong    5.15 /  4.30  non-text; hover and emphasis borders
+    contour        5.44 /   —    DECORATIVE ONLY, never a lone carrier
+
+  On --color-board (#07161C):
+
+    flap          15.91  AAA
+    brass          9.01  AAA
+    amber          8.23  AAA   (measured on board-card, where it sits)
+    board-rule     3.03  non-text only
+
+  `rule` and `board-rule` exist so borders never need an opacity
+  modifier to look right — a `border-rule/40` would composite down to
+  roughly 2:1 and quietly fail SC 1.4.11. Full-opacity tokens only.
 */
 
 @theme {
-  --color-paper: #fdfbf4;
-  --color-paper-alt: #f4efe2;
-  --color-ink: #1b1a17;
-  --color-ink-soft: #4a473f;
-  --color-postbox: #c8102e;
-  --color-postbox-deep: #9e0c24;
-  --color-contour: #c89f6e;
-  --color-grid: #6b8fb5;
-  --color-water: #0f5e7a;
-  --color-woodland: #3f6b38;
-  --color-moor: #e8d9c0;
+  /* Surfaces. "Paper" is the page ground; it is midnight here, but ink
+     still sits on paper, which is why the metaphor survives the repaint. */
+  --color-paper: #0b1e26;
+  --color-paper-alt: #122e37;
 
-  /* Departure board (dark surface) */
-  --color-board: #14140f;
-  --color-board-card: #1f1f17;
-  --color-flap: #f2ebd8;
-  --color-amber: #e8a33d;
+  /* Text */
+  --color-ink: #f1eadb;
+  --color-ink-soft: #a8bec4;
+
+  /* Accent. Coral rose reads warm against the teal without the shouting
+     that a saturated red does on a dark ground. `-bright` is the small-text
+     and hover step: on dark surfaces emphasis means lighter, not deeper. */
+  --color-accent: #f2726b;
+  --color-accent-bright: #ff9e90;
+
+  /* Brass — the Deco metal. Hairlines, wordmark, focus ring. */
+  --color-brass: #ddae59;
+  /* Antique brass, for frames and hairlines. Sits at 4.07 / 3.40 / 4.39 on
+     paper / paper-alt / board, so a card outline clears 3:1 on every
+     surface it is drawn against without competing with the text. */
+  --color-brass-dim: #96773d;
+
+  /* Structure */
+  --color-rule: #567a85;
+  --color-rule-strong: #6d939f;
+
+  /* Cartography */
+  --color-contour: #b58a44;
+  --color-grid: #7fa8b4;
+  --color-water: #63b8d6;
+  --color-woodland: #7fc9ae;
+  --color-moor: #224b58;
+
+  /* Departure board — darker than the page, so it still reads as its own
+     object now that the page itself is dark. Brass frame does the rest. */
+  --color-board: #07161c;
+  --color-board-card: #102730;
+  --color-board-rule: #5c6462;
+  --color-flap: #f4eedf;
+  --color-amber: #e9b45c;
 
   /* Set by next/font in the root layout. */
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-mono: var(--font-roboto-mono), ui-monospace, monospace;
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-karla), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
 }
 
+/*
+  Two very soft pools of light — one brass low on the page, one teal high
+  and left — so the midnight ground has depth instead of reading as flat
+  black. Fixed, so they behave like stage lighting rather than tiling with
+  the scroll. Both sit far below any text contrast threshold on purpose.
+*/
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
+  background-image:
+    radial-gradient(
+      ellipse 90% 55% at 12% -10%,
+      color-mix(in srgb, var(--color-grid) 13%, transparent),
+      transparent 70%
+    ),
+    radial-gradient(
+      ellipse 70% 50% at 88% 108%,
+      color-mix(in srgb, var(--color-brass) 9%, transparent),
+      transparent 70%
+    );
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 /*
   Visible focus for keyboard users on every interactive element.
-  The offset keeps the ring clear of the contour texture so it
-  stays legible against busy map backgrounds (SC 2.4.7, 2.4.11).
+  Brass rather than coral: it is the highest-contrast accent on every
+  surface here (8.37:1 on paper, 9.01:1 on the board). The offset means
+  the ring is drawn on the page ground even when the control itself is a
+  coral pill, so it never has to out-contrast the fill it surrounds
+  (SC 2.4.7, 2.4.11).
 */
 :focus-visible {
-  outline: 3px solid var(--color-postbox);
+  outline: 3px solid var(--color-brass);
   outline-offset: 2px;
   border-radius: 2px;
 }
@@ -69,37 +133,113 @@ body {
 }
 
 /* ============================================================
+   DECO DETAILING
+   ============================================================
+   All three are drawn on aria-hidden nodes or in ::before/::after,
+   so none of it reaches the accessibility tree.
+*/
+
+/*
+  The stacked thick/thin brass rule that sits under a Deco masthead.
+  A border can only be one weight, so this is a two-stop gradient.
+*/
+.deco-rule {
+  border: 0;
+  height: 4px;
+  background-image: linear-gradient(
+    to bottom,
+    var(--color-brass) 0 2px,
+    transparent 2px 3px,
+    color-mix(in srgb, var(--color-brass) 55%, transparent) 3px 4px
+  );
+}
+
+/*
+  Corner brackets — the double-frame detail off a Deco poster border.
+  Drawn inset from the card edge so the card's own border reads as the
+  outer line and these as the inner one.
+*/
+.deco-corners::before,
+.deco-corners::after {
+  content: "";
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: color-mix(in srgb, var(--color-brass) 60%, transparent);
+  border-style: solid;
+  pointer-events: none;
+}
+
+.deco-corners::before {
+  top: 10px;
+  left: 10px;
+  border-width: 1px 0 0 1px;
+}
+
+.deco-corners::after {
+  right: 10px;
+  bottom: 10px;
+  border-width: 0 1px 1px 0;
+}
+
+/*
+  Sunburst rays fanning from the bottom edge — the single most Deco thing
+  available, and cheap: one repeating-conic-gradient, masked so the rays
+  dissolve before they reach the text.
+*/
+.deco-sunburst {
+  background-image: repeating-conic-gradient(
+    from 200deg at 50% 118%,
+    color-mix(in srgb, var(--color-brass) 30%, transparent) 0deg 0.55deg,
+    transparent 0.55deg 5deg
+  );
+  -webkit-mask-image: radial-gradient(
+    ellipse 85% 100% at 50% 118%,
+    #000 0%,
+    transparent 72%
+  );
+  mask-image: radial-gradient(
+    ellipse 85% 100% at 50% 118%,
+    #000 0%,
+    transparent 72%
+  );
+}
+
+/* ============================================================
    CONTOUR TEXTURE
    ============================================================
    Decorative only. Always rendered inside an aria-hidden node.
+   Alphas are lower than the daytime sheet used: brass on midnight is a
+   far higher-contrast pairing than tan on cream, so the same opacity
+   would read as scribble rather than relief.
 */
 .os-contours {
   background-image:
     repeating-radial-gradient(
       ellipse 62% 44% at 22% 32%,
       transparent 0 26px,
-      color-mix(in srgb, var(--color-contour) 46%, transparent) 26px 27.5px,
+      color-mix(in srgb, var(--color-contour) 30%, transparent) 26px 27.5px,
       transparent 27.5px 54px
     ),
     repeating-radial-gradient(
       ellipse 48% 66% at 78% 68%,
       transparent 0 30px,
-      color-mix(in srgb, var(--color-contour) 38%, transparent) 30px 31.5px,
+      color-mix(in srgb, var(--color-contour) 24%, transparent) 30px 31.5px,
       transparent 31.5px 62px
     );
 }
 
-/* National Grid squares. Non-text, 3.26:1 — clears SC 1.4.11. */
+/* National Grid squares. Non-text texture. */
 .os-grid {
   background-image:
     linear-gradient(
       to right,
-      color-mix(in srgb, var(--color-grid) 30%, transparent) 0 1px,
+      color-mix(in srgb, var(--color-grid) 22%, transparent) 0 1px,
       transparent 1px
     ),
     linear-gradient(
       to bottom,
-      color-mix(in srgb, var(--color-grid) 30%, transparent) 0 1px,
+      color-mix(in srgb, var(--color-grid) 22%, transparent) 0 1px,
       transparent 1px
     );
   background-size: 44px 44px;
@@ -129,6 +269,20 @@ body {
   backface-visibility: hidden;
 }
 
+/*
+  A real drum catches the light on its upper half and falls away below
+  the seam. One gradient on the cell sells the whole illusion.
+*/
+.os-flap-face {
+  background-image: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--color-flap) 7%, transparent) 0%,
+    transparent 48%,
+    color-mix(in srgb, #000 22%, transparent) 52%,
+    transparent 100%
+  );
+}
+
 /* The hairline across a real split-flap character drum. */
 .os-flap-seam::after {
   content: "";
@@ -136,7 +290,7 @@ body {
   inset-inline: 0;
   top: 50%;
   height: 1px;
-  background-color: color-mix(in srgb, var(--color-board) 85%, transparent);
+  background-color: color-mix(in srgb, #000 70%, transparent);
   pointer-events: none;
 }
 

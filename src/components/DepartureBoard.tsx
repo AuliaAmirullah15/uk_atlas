@@ -73,7 +73,7 @@ function StatusPill({
     connecting: { label: "Connecting", dot: "bg-amber" },
     live: { label: "Live", dot: "bg-woodland" },
     paused: { label: "Paused", dot: "bg-ink-soft" },
-    error: { label: "Reconnecting", dot: "bg-postbox" },
+    error: { label: "Reconnecting", dot: "bg-accent" },
   };
   const { label, dot } = copy[status];
 
@@ -128,17 +128,17 @@ function BoardRow({
     <tr
       /*
         aria-current marks the linked row for assistive tech, so the
-        map↔board connection is not conveyed by the red edge alone.
+        map↔board connection is not conveyed by the coral edge alone.
       */
       aria-current={highlighted ? "true" : undefined}
-      className={`border-b border-flap/10 transition-colors last:border-0 ${
-        highlighted ? "bg-flap/8" : ""
+      className={`border-b border-board-rule/60 transition-colors last:border-0 ${
+        highlighted ? "bg-flap/10" : ""
       }`}
     >
       <th
         scope="row"
         className={`py-2 pr-3 text-left align-middle font-normal transition-shadow ${
-          highlighted ? "shadow-[inset_3px_0_0_0_var(--color-postbox)] pl-2" : ""
+          highlighted ? "shadow-[inset_3px_0_0_0_var(--color-accent)] pl-2" : ""
         }`}
       >
         <Link
@@ -210,17 +210,22 @@ export function DepartureBoard() {
   return (
     <section
       aria-labelledby="board-heading"
-      className="rounded-lg bg-board p-4 shadow-lg sm:p-6"
+      /*
+        The board sits darker than the page and is ringed in brass. Now that
+        the page itself is midnight, the frame is what keeps the board reading
+        as a separate physical object rather than a hole in the layout.
+      */
+      className="rounded-lg border border-brass-dim bg-board p-4 shadow-[0_18px_45px_-20px_rgba(0,0,0,0.9)] sm:p-6"
     >
       <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
         <div>
           <h2
             id="board-heading"
-            className="font-mono text-lg font-semibold tracking-[0.2em] text-flap uppercase"
+            className="font-mono text-lg font-semibold tracking-[0.2em] text-brass uppercase"
           >
             UK Weather Departures
           </h2>
-          <p className="mt-1 max-w-prose text-xs text-flap/60">
+          <p className="mt-1 max-w-prose text-xs text-flap/70">
             Live observations from Open-Meteo, streamed over Server-Sent
             Events. Upstream refreshes roughly every 15 minutes.
           </p>
@@ -236,7 +241,7 @@ export function DepartureBoard() {
             type="button"
             onClick={togglePaused}
             aria-pressed={paused}
-            className="rounded-sm border border-flap/30 px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-flap transition-colors hover:bg-flap/10"
+            className="rounded-sm border border-board-rule px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-flap transition-colors hover:bg-flap/10"
           >
             {paused ? "Resume updates" : "Pause updates"}
           </button>
@@ -250,7 +255,7 @@ export function DepartureBoard() {
             pause button to stop updates.
           </caption>
           <thead>
-            <tr className="border-b border-flap/25">
+            <tr className="border-b border-board-rule">
               {["Region", "Temp", "Wind", "Conditions", "Verdict"].map((h) => (
                 <th
                   key={h}
@@ -280,7 +285,7 @@ export function DepartureBoard() {
         </table>
       </div>
 
-      <p className="mt-3 font-mono text-[0.65rem] text-flap/45">
+      <p className="mt-3 font-mono text-[0.65rem] text-flap/70">
         {lastUpdateAt
           ? `Last change received ${lastUpdateAt.toLocaleTimeString("en-GB")}`
           : "Awaiting first observation…"}

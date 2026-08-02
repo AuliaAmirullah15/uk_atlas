@@ -34,8 +34,8 @@ function Panel({
   children: React.ReactNode;
 }) {
   return (
-    <section className="rounded-lg border border-grid/40 bg-paper p-5">
-      <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-postbox-deep">
+    <section className="rounded-lg border border-rule bg-paper p-5">
+      <h2 className="font-mono text-xs uppercase tracking-[0.2em] text-brass">
         {title}
       </h2>
       <div className="mt-4">{children}</div>
@@ -66,29 +66,29 @@ export default async function RegionPage({
         <nav aria-label="Breadcrumb" className="mb-6">
           <Link
             href="/"
-            className="font-mono text-xs uppercase tracking-wider text-ink-soft hover:text-postbox-deep hover:underline"
+            className="font-mono text-xs uppercase tracking-wider text-ink-soft hover:text-accent-bright hover:underline"
           >
             ← Back to the map
           </Link>
         </nav>
 
-        <header className="relative overflow-hidden rounded-lg border-2 border-grid/50 bg-paper-alt p-6 sm:p-8">
+        <header className="deco-corners relative overflow-hidden rounded-lg border border-brass-dim bg-paper-alt p-6 sm:p-8">
           <div
             aria-hidden="true"
-            className="os-contours absolute inset-0 opacity-50"
+            className="os-contours absolute inset-0 opacity-70"
           />
           <div className="relative">
-            <p className="font-mono text-xs uppercase tracking-[0.2em] text-ink-soft">
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-brass">
               {region.nation}
             </p>
-            <h1 className="mt-2 text-3xl font-bold tracking-tight text-ink sm:text-4xl">
+            <h1 className="mt-2 font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
               {region.name}
             </h1>
             <p className="mt-4 max-w-2xl text-base text-ink-soft">
               {region.blurb}
             </p>
 
-            <p className="mt-5 border-l-4 border-postbox pl-3 text-sm">
+            <p className="mt-5 border-l-4 border-accent pl-3 text-sm">
               <span className="font-semibold text-ink">
                 &ldquo;{region.phrase.text}&rdquo;
               </span>{" "}
@@ -134,7 +134,7 @@ export default async function RegionPage({
               {region.landmarks.map((landmark) => (
                 <li
                   key={landmark}
-                  className="rounded-full border border-grid/50 bg-paper-alt px-3 py-1 text-sm text-ink"
+                  className="rounded-full border border-rule bg-paper-alt px-3 py-1 text-sm text-ink"
                 >
                   {landmark}
                 </li>

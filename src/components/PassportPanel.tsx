@@ -25,17 +25,17 @@ export function PassportPanel() {
   return (
     <section
       aria-labelledby="passport-heading"
-      className="rounded-lg border-2 border-grid/50 bg-paper-alt p-5"
+      className="rounded-lg border border-brass-dim bg-paper-alt p-5"
     >
       <div className="flex flex-wrap items-baseline justify-between gap-3">
         <h2
           id="passport-heading"
-          className="font-mono text-sm uppercase tracking-[0.2em] text-ink-soft"
+          className="font-mono text-sm uppercase tracking-[0.2em] text-brass"
         >
           Passport
         </h2>
         <p className="font-mono text-xs text-ink-soft">
-          <span className="font-bold text-postbox-deep">{collected}</span> of{" "}
+          <span className="font-bold text-accent-bright">{collected}</span> of{" "}
           {total} collected
         </p>
       </div>
@@ -56,8 +56,8 @@ export function PassportPanel() {
                 href={`/region/${region.slug}`}
                 className={`relative flex h-full flex-col justify-between gap-1 overflow-hidden rounded-md border-2 px-3 py-2 transition-colors ${
                   stamped
-                    ? "border-postbox/60 bg-paper"
-                    : "border-dashed border-grid/50 bg-paper/50 hover:border-grid"
+                    ? "border-accent bg-paper"
+                    : "border-dashed border-rule bg-paper/50 hover:border-rule-strong"
                 }`}
               >
                 <span
@@ -73,7 +73,7 @@ export function PassportPanel() {
                     {/* The stamp. Decorative; the text below carries it. */}
                     <span
                       aria-hidden="true"
-                      className="pointer-events-none absolute -top-1 -right-3 -rotate-12 rounded-sm border-2 border-postbox/70 px-2 py-0.5 font-mono text-[0.5rem] font-bold uppercase tracking-widest text-postbox/70"
+                      className="pointer-events-none absolute -top-1 -right-3 -rotate-12 rounded-sm border-2 border-accent/70 px-2 py-0.5 font-mono text-[0.5rem] font-bold uppercase tracking-widest text-accent/70"
                     >
                       Visited
                     </span>
@@ -102,7 +102,7 @@ export function PassportPanel() {
         <button
           type="button"
           onClick={reset}
-          className="mt-4 rounded-md border border-grid/50 px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-ink-soft transition-colors hover:border-postbox hover:text-postbox-deep"
+          className="mt-4 rounded-md border border-rule px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-ink-soft transition-colors hover:border-accent hover:text-accent-bright"
         >
           Clear all {collected} stamps
         </button>

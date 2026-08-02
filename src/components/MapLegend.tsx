@@ -13,14 +13,14 @@
 const ENTRIES: { swatch: React.ReactNode; label: string }[] = [
   {
     swatch: (
-      <span className="h-2.5 w-2.5 rounded-full border-2 border-paper bg-postbox" />
+      <span className="h-2.5 w-2.5 rounded-full border-2 border-paper bg-accent" />
     ),
     label: "Region — select for detail",
   },
   {
     swatch: (
-      <span className="relative h-2.5 w-2.5 rounded-full border-2 border-postbox bg-paper">
-        <span className="absolute -top-1 -right-1 block h-2 w-2 rounded-full bg-postbox" />
+      <span className="relative h-2.5 w-2.5 rounded-full border-2 border-accent bg-paper">
+        <span className="absolute -top-1 -right-1 block h-2 w-2 rounded-full bg-accent" />
       </span>
     ),
     label: "Visited (stamped in your passport)",
@@ -33,7 +33,7 @@ const ENTRIES: { swatch: React.ReactNode; label: string }[] = [
   },
   {
     swatch: (
-      <span className="h-0 w-5 border-t-2 border-dashed border-postbox-deep" />
+      <span className="h-0 w-5 border-t-2 border-dashed border-accent-bright" />
     ),
     label: "UK border with Ireland, approximate",
   },
@@ -49,8 +49,8 @@ const ENTRIES: { swatch: React.ReactNode; label: string }[] = [
 
 export function MapLegend() {
   return (
-    <div className="rounded-md border border-grid/40 bg-paper p-4">
-      <h3 className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-ink-soft">
+    <div className="rounded-md border border-rule bg-paper p-4">
+      <h3 className="font-mono text-[0.65rem] uppercase tracking-[0.2em] text-brass">
         Key
       </h3>
       <ul className="mt-3 grid list-none grid-cols-1 gap-x-6 gap-y-2 p-0 sm:grid-cols-2">
