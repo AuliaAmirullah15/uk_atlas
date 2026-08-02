@@ -12,7 +12,10 @@ export default function Home() {
     <>
       <SiteHeader />
 
-      <main id="main" className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6">
+      <main
+        id="main"
+        className="mx-auto w-full max-w-6xl flex-1 px-4 py-8 sm:px-6"
+      >
         {/*
           One h1 per page, and it is the page's real subject. The board and
           map are h2 sections beneath it, so the heading outline reads as a
@@ -20,13 +23,17 @@ export default function Home() {
         */}
         {/*
           The hero frame. Both decorative layers are aria-hidden and sit
-          behind a `relative` content wrapper, so the sunburst rays and the
-          corner brackets never enter the accessibility tree or the text flow.
+          behind a `relative` content wrapper, so neither the tweed nor the
+          corner brackets enter the accessibility tree or the text flow.
+
+          The weave is masked down at the top so the eyebrow and headline sit
+          on clean cloth — the texture wants to be felt at the edges of the
+          card, not read through the words.
         */}
         <div className="deco-corners relative overflow-hidden rounded-lg border border-rule bg-paper-alt px-5 py-8 sm:px-10 sm:py-12">
           <div
             aria-hidden="true"
-            className="deco-sunburst pointer-events-none absolute inset-0"
+            className="tweed tweed-fade pointer-events-none absolute inset-0"
           />
 
           <div className="relative">
@@ -38,7 +45,7 @@ export default function Home() {
               A field guide to the twelve regions of the{" "}
               <span className="text-brass italic">United Kingdom</span>
             </h1>
-            <p className="mt-5 max-w-2xl text-base text-ink-soft">
+            <p className="lede mt-5 max-w-2xl text-base text-ink-soft">
               Contour lines, brass hairlines, and a station board that will not
               stop telling you it is drizzling somewhere. Food, festivals and
               landmarks for every region — plus live weather, streamed.

@@ -28,6 +28,16 @@ const T = Object.fromEntries(
   [...theme.matchAll(/--color-([a-z-]+):\s*(#[0-9a-f]{6})/g)].map((m) => [m[1], m[2]]),
 );
 
+/*
+  Derived backdrop, not a token: a single herringbone thread is the .tweed
+  background-color (brass at TWEED_ALPHA) composited onto a card. It is the
+  lightest surface any text can land on, so it is the worst case to check.
+  Kept in step with the `color-mix` percentage in .tweed.
+*/
+const TWEED_ALPHA =
+  Number(/\.tweed\s*\{[^}]*?--color-brass\)\s*(\d+)%/s.exec(css)?.[1]) / 100;
+if (!Number.isFinite(TWEED_ALPHA)) throw new Error("could not read .tweed alpha from globals.css");
+
 const hex = (h) => [0, 2, 4].map((i) => parseInt(h.slice(1 + i, 3 + i), 16));
 const lin = (c) => { const s = c / 255; return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4; };
 const lum = (r) => 0.2126 * lin(r[0]) + 0.7152 * lin(r[1]) + 0.0722 * lin(r[2]);
@@ -63,6 +73,13 @@ const CHECKS = [
   ["text", "amber", 0.9, "board", 4.5, "verdict column"],
   ["text", "woodland", 1, "board", 4.5, "live dot"],
 
+  // Worst-case backdrop: directly on a herringbone thread, where the weave
+  // lightens paper-alt the most. Text is laid out to avoid the strong part of
+  // the fade, but it must still clear 4.5:1 if it ever lands on a thread.
+  ["text", "ink", 1, "tweed-thread", 4.5, "body copy on a weave thread"],
+  ["text", "ink-soft", 1, "tweed-thread", 4.5, "lede on a weave thread"],
+  ["text", "brass", 1, "tweed-thread", 4.5, "eyebrow / drop cap on a thread"],
+
   // Non-text: borders, rules, state indicators
   ["non-text", "rule", 1, "paper", 3.0, "hairline on ground"],
   ["non-text", "rule", 1, "paper-alt", 3.0, "hairline on cards"],
@@ -81,6 +98,8 @@ const CHECKS = [
 
 let failures = 0;
 const width = Math.max(...CHECKS.map((c) => c[5].length));
+
+T["tweed-thread"] = over(T.brass, T["paper-alt"], TWEED_ALPHA);
 
 for (const [kind, fg, alpha, bg, need, where] of CHECKS) {
   if (!T[fg] || !T[bg]) { console.log(`?? missing token ${fg} / ${bg}`); failures++; continue; }

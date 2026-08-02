@@ -86,6 +86,16 @@ export default function AboutPage() {
           and every region on the plot is also a text entry in the list below
           it.
         </p>
+        <p className="mt-3 text-ink-soft">
+          The herringbone is the one texture that sits behind live text, so it
+          is checked rather than exempted. A single thread of the weave is the
+          lightest surface anything on this site can land on, and body copy
+          still reads 8:1 against it. All of this runs as a script over the
+          stylesheet —{" "}
+          <code className="font-mono text-sm">npm run check:contrast</code>{" "}
+          parses the tokens out of the CSS, composites every alpha, and exits
+          non-zero if a single pairing slips. Contrast claims rot otherwise.
+        </p>
 
         <H2>Regions</H2>
         <p className="mt-3 text-ink-soft">

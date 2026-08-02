@@ -88,24 +88,43 @@
 }
 
 /*
-  Two very soft pools of light — one brass low on the page, one teal high
-  and left — so the midnight ground has depth instead of reading as flat
-  black. Fixed, so they behave like stage lighting rather than tiling with
-  the scroll. Both sit far below any text contrast threshold on purpose.
+  GASLIGHT
+  A smoky room rather than a lit page: a warm brass lamp low and left, cold
+  haze coming in high and right, a band of smoke drifting across the middle,
+  and a vignette pulling the corners down. Fixed, so it behaves like room
+  lighting instead of tiling with the scroll.
+
+  Every layer sits far below any contrast threshold, and the vignette only
+  ever *darkens* the ground — which raises the contrast of the ivory text
+  sitting on it, so nothing measured here can regress.
 */
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   background-image:
+    /* gas lamp, low left */
     radial-gradient(
-      ellipse 90% 55% at 12% -10%,
-      color-mix(in srgb, var(--color-grid) 13%, transparent),
+      ellipse 55% 38% at 6% 88%,
+      color-mix(in srgb, var(--color-brass) 12%, transparent),
+      transparent 68%
+    ),
+    /* cold night air, high right */
+    radial-gradient(
+      ellipse 75% 45% at 94% 4%,
+      color-mix(in srgb, var(--color-grid) 12%, transparent),
       transparent 70%
     ),
+    /* smoke drifting across the middle distance */
     radial-gradient(
-      ellipse 70% 50% at 88% 108%,
-      color-mix(in srgb, var(--color-brass) 9%, transparent),
-      transparent 70%
+      ellipse 130% 26% at 50% 46%,
+      color-mix(in srgb, var(--color-grid) 6%, transparent),
+      transparent 72%
+    ),
+    /* vignette */
+    radial-gradient(
+      ellipse 105% 85% at 50% 46%,
+      transparent 38%,
+      rgba(0, 0, 0, 0.34) 100%
     );
   background-attachment: fixed;
   background-repeat: no-repeat;
@@ -183,26 +202,95 @@ body {
 }
 
 /*
-  Sunburst rays fanning from the bottom edge — the single most Deco thing
-  available, and cheap: one repeating-conic-gradient, masked so the rays
-  dissolve before they reach the text.
+  HERRINGBONE TWEED
+  The cloth the whole thing is cut from — a tailor's herringbone, which is
+  what a Birmingham three-piece is woven in, and quiet enough to sit under
+  a headline without competing with it.
+
+  Drawn as a mask rather than a coloured data URI on purpose: an SVG data
+  URI would have to hardcode the brass hex and would then drift the moment
+  the token changed. Masking a token-coloured background keeps exactly one
+  source of truth for the colour.
+
+  The tile is two columns of opposing 45° strokes, the right column offset
+  by half a step — that stagger is the difference between herringbone and
+  a plain chevron.
 */
-.deco-sunburst {
-  background-image: repeating-conic-gradient(
-    from 200deg at 50% 118%,
-    color-mix(in srgb, var(--color-brass) 30%, transparent) 0deg 0.55deg,
-    transparent 0.55deg 5deg
+.tweed {
+  --tweed-tile: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%3E%3Cg%20stroke='%23000'%20stroke-width='1.1'%20fill='none'%3E%3Cpath%20d='M0%2012L12%200M0%2024L12%2012M0%200L12%20-12'/%3E%3Cpath%20d='M12%206L24%2018M12%20-6L24%206M12%2018L24%2030'/%3E%3C/g%3E%3C/svg%3E");
+  background-color: color-mix(in srgb, var(--color-brass) 20%, transparent);
+  -webkit-mask-image: var(--tweed-tile);
+  mask-image: var(--tweed-tile);
+  -webkit-mask-size: 24px 24px;
+  mask-size: 24px 24px;
+  mask-repeat: repeat;
+}
+
+/*
+  The hero's cut of the cloth: the same weave, intersected with a diagonal
+  fade so the fabric is felt at the lower-right edge of the card and has
+  fallen away entirely behind the headline. Texture under display type is
+  what makes a hero look busy; texture at its margins is what makes it look
+  made of something.
+*/
+.tweed-fade {
+  --tweed-veil: linear-gradient(157deg, transparent 12%, #000 82%);
+  -webkit-mask-image: var(--tweed-tile), var(--tweed-veil);
+  mask-image: var(--tweed-tile), var(--tweed-veil);
+  -webkit-mask-size: 24px 24px, 100% 100%;
+  mask-size: 24px 24px, 100% 100%;
+  -webkit-mask-repeat: repeat, no-repeat;
+  mask-repeat: repeat, no-repeat;
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+/*
+  An engraved divider: hairline, brass lozenge, hairline. The bookplate
+  ornament off a Victorian title page. Decorative — it separates nothing
+  the heading structure does not already separate.
+*/
+.deco-flourish {
+  position: relative;
+  height: 9px;
+  background-image: linear-gradient(
+    to right,
+    transparent,
+    var(--color-brass-dim) 22%,
+    var(--color-brass-dim) 78%,
+    transparent
   );
-  -webkit-mask-image: radial-gradient(
-    ellipse 85% 100% at 50% 118%,
-    #000 0%,
-    transparent 72%
-  );
-  mask-image: radial-gradient(
-    ellipse 85% 100% at 50% 118%,
-    #000 0%,
-    transparent 72%
-  );
+  background-size: 100% 1px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.deco-flourish::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 7px;
+  height: 7px;
+  margin: -3.5px 0 0 -3.5px;
+  transform: rotate(45deg);
+  background-color: var(--color-brass);
+}
+
+/*
+  Drop cap for a lede paragraph. ::first-letter is styling only — it does
+  not fragment the text node, so the paragraph still reads as one sentence
+  to a screen reader and still copies as plain prose.
+*/
+.lede::first-letter {
+  float: left;
+  padding-right: 0.55rem;
+  padding-top: 0.3rem;
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  font-weight: 600;
+  line-height: 0.78;
+  color: var(--color-brass);
 }
 
 /* ============================================================
