@@ -2,12 +2,12 @@
 
 /*
   ============================================================
-  MIDNIGHT DECO — "SHEET 1, NIGHT EDITION"
+  MIDNIGHT DECO: "SHEET 1, NIGHT EDITION"
   ============================================================
   Still an Ordnance Survey plot: contours, graticule, split-flap.
-  Printed on midnight teal in brass and coral instead of cream and
-  postbox red, so it reads like a 1930s railway poster rather than
-  a daytime map sheet.
+  Printed on midnight teal in brass and Hogwarts claret instead of
+  cream and postbox red, so it reads like a 1930s railway poster
+  rather than a daytime map sheet.
 
   Contrast ratios are measured, not estimated. Do not change a value
   without re-checking it: every colour that carries text must clear
@@ -18,14 +18,16 @@
 
     ink           14.28 / 11.91  AAA
     ink-soft       8.82 /  7.36  AAA
-    accent-bright  8.59 /  7.17  AAA  <- use for small coral text
-    accent         6.02 /  5.02  AA   <- pill fills; dark text on it is 6.02
-    brass          8.37 /  6.98  AAA
+    brass          8.37 /  6.98  AAA  <- section labels, links, stamps
     woodland       8.85 /  7.38  AAA
     water          7.62 /  6.36  AAA
+    accent-edge    3.75 /  3.13  non-text only (borders, pins, dots)
+    accent         2.00 /  1.67  FILL ONLY. Never text, never a lone
+                                 border. Ivory label on it is 7.15, and
+                                 it always carries a brass-dim edge.
     rule           3.68 /  3.07  non-text only (borders, dividers)
     rule-strong    5.15 /  4.30  non-text; hover and emphasis borders
-    contour        5.44 /   —    DECORATIVE ONLY, never a lone carrier
+    contour        5.44 /  n/a   DECORATIVE ONLY, never a lone carrier
 
   On --color-board (#07161C):
 
@@ -35,7 +37,7 @@
     board-rule     3.03  non-text only
 
   `rule` and `board-rule` exist so borders never need an opacity
-  modifier to look right — a `border-rule/40` would composite down to
+  modifier to look right. A `border-rule/40` would composite down to
   roughly 2:1 and quietly fail SC 1.4.11. Full-opacity tokens only.
 */
 
@@ -49,13 +51,40 @@
   --color-ink: #f1eadb;
   --color-ink-soft: #a8bec4;
 
-  /* Accent. Coral rose reads warm against the teal without the shouting
-     that a saturated red does on a dark ground. `-bright` is the small-text
-     and hover step: on dark surfaces emphasis means lighter, not deeper. */
-  --color-accent: #f2726b;
-  --color-accent-bright: #ff9e90;
+  /*
+    Accent: Hogwarts Express red. THE RED IS NEVER TEXT. Read this before
+    reaching for it.
 
-  /* Brass — the Deco metal. Hairlines, wordmark, focus ring. */
+    Red carries only 21% of perceived luminance, so against this ground even
+    pure #FF0000 reaches just 4.28:1, under the 4.5:1 floor for body text.
+    There is no such thing as a saturated red that can carry small type here.
+    The only way to lift a red over 4.5 is to pour green and blue into it,
+    which is precisely what turns it pink. So the red does not do text at all:
+    every place that once wanted red lettering uses `brass` instead, which is
+    both legible (8.37 / 6.98) and the more Victorian answer anyway.
+
+    What the red DOES do:
+
+    `accent` is for FILLS. Burgundy is 2.00:1 against the page, so a pill painted
+    in it does not separate from the background on its own; every control
+    filled with `accent` carries a `brass-dim` edge, and that edge is what
+    draws the object. Its label must be `ink` (7.15:1).
+
+    `accent-hover` is the lit step for a filled control. On a dark surface
+    emphasis means lighter, never deeper; still carries `ink` at 5.68.
+
+    `accent-edge` is for BORDERS, PINS, DOTS, RULES. Non-text, so the bar is 3:1
+    rather than 4.5:1, and a true cardinal red clears it: 3.75 on paper, 3.13
+    on paper-alt, 4.04 on the board. paper-alt is the binding surface, and this
+    is the deepest red that still clears 3:1 there, so going darker breaks it.
+    On the map it is ringed in brass, because red on the teal land is only
+    1.9:1 and the brass ring (4.64) is what makes a pin visible.
+  */
+  --color-accent: #8e2434;
+  --color-accent-hover: #a62e41;
+  --color-accent-edge: #d8394b;
+
+  /* Brass: the Deco metal. Hairlines, wordmark, focus ring. */
   --color-brass: #ddae59;
   /* Antique brass, for frames and hairlines. Sits at 4.07 / 3.40 / 4.39 on
      paper / paper-alt / board, so a card outline clears 3:1 on every
@@ -73,7 +102,7 @@
   --color-woodland: #7fc9ae;
   --color-moor: #224b58;
 
-  /* Departure board — darker than the page, so it still reads as its own
+  /* Departure board: darker than the page, so it still reads as its own
      object now that the page itself is dark. Brass frame does the rest. */
   --color-board: #07161c;
   --color-board-card: #102730;
@@ -95,7 +124,7 @@
   lighting instead of tiling with the scroll.
 
   Every layer sits far below any contrast threshold, and the vignette only
-  ever *darkens* the ground — which raises the contrast of the ivory text
+  ever *darkens* the ground, which raises the contrast of the ivory text
   sitting on it, so nothing measured here can regress.
 */
 body {
@@ -132,10 +161,10 @@ body {
 
 /*
   Visible focus for keyboard users on every interactive element.
-  Brass rather than coral: it is the highest-contrast accent on every
-  surface here (8.37:1 on paper, 9.01:1 on the board). The offset means
-  the ring is drawn on the page ground even when the control itself is a
-  coral pill, so it never has to out-contrast the fill it surrounds
+  Brass rather than the accent red: it is the highest-contrast accent on
+  every surface here (8.37:1 on paper, 9.01:1 on the board). The offset
+  means the ring is drawn on the page ground even when the control itself
+  is a burgundy pill, so it never has to out-contrast the fill it surrounds
   (SC 2.4.7, 2.4.11).
 */
 :focus-visible {
@@ -174,7 +203,7 @@ body {
 }
 
 /*
-  Corner brackets — the double-frame detail off a Deco poster border.
+  Corner brackets: the double-frame detail off a Deco poster border.
   Drawn inset from the card edge so the card's own border reads as the
   outer line and these as the inner one.
 */
@@ -203,7 +232,7 @@ body {
 
 /*
   HERRINGBONE TWEED
-  The cloth the whole thing is cut from — a tailor's herringbone, which is
+  The cloth the whole thing is cut from: a tailor's herringbone, which is
   what a Birmingham three-piece is woven in, and quiet enough to sit under
   a headline without competing with it.
 
@@ -213,7 +242,7 @@ body {
   source of truth for the colour.
 
   The tile is two columns of opposing 45° strokes, the right column offset
-  by half a step — that stagger is the difference between herringbone and
+  by half a step. That stagger is the difference between herringbone and
   a plain chevron.
 */
 .tweed {
@@ -247,7 +276,7 @@ body {
 
 /*
   An engraved divider: hairline, brass lozenge, hairline. The bookplate
-  ornament off a Victorian title page. Decorative — it separates nothing
+  ornament off a Victorian title page. Decorative: it separates nothing
   the heading structure does not already separate.
 */
 .deco-flourish {
@@ -278,7 +307,7 @@ body {
 }
 
 /*
-  Drop cap for a lede paragraph. ::first-letter is styling only — it does
+  Drop cap for a lede paragraph. ::first-letter is styling only, so it does
   not fragment the text node, so the paragraph still reads as one sentence
   to a screen reader and still copies as plain prose.
 */
@@ -384,7 +413,7 @@ body {
 
 /*
   SC 2.3.3 Animation from Interactions. Anyone who has asked their
-  OS to reduce motion gets the settled value with no flipping — the
+  OS to reduce motion gets the settled value with no flipping. The
   JS driver also checks matchMedia and jumps straight to the target,
   because killing the CSS alone would still leave glyphs cycling.
 */

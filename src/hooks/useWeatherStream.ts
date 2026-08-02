@@ -12,7 +12,7 @@ type TransportStatus = "connecting" | "live" | "error";
 export type WeatherStream = {
   observations: Map<string, Observation>;
   status: ConnectionStatus;
-  /** Offset of the newest record applied — the consumer position. */
+  /** Offset of the newest record applied, i.e. the consumer position. */
   offset: number | null;
   lastUpdateAt: Date | null;
   paused: boolean;
@@ -22,7 +22,7 @@ export type WeatherStream = {
 /**
  * Subscribes to the observation stream over SSE.
  *
- * The `paused` control is not a nicety — WCAG 2.1 SC 2.2.2 (Pause, Stop,
+ * The `paused` control is not a nicety. WCAG 2.1 SC 2.2.2 (Pause, Stop,
  * Hide) requires a mechanism to pause automatically updating information.
  * Pausing genuinely closes the connection rather than merely hiding
  * updates, so a paused board is also a quiet one for screen readers.

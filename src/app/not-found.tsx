@@ -14,13 +14,13 @@ export default function NotFound() {
           There is no map for that
         </h1>
         <p className="mt-4 text-ink-soft">
-          The page you asked for is not in this atlas. It happens — grid
+          The page you asked for is not in this atlas. It happens. Grid
           references are fiddly.
         </p>
         <p className="mt-8">
           <Link
             href="/"
-            className="inline-block rounded-md bg-accent px-4 py-2 font-semibold text-paper hover:bg-accent-bright"
+            className="inline-block rounded-md border border-brass-dim bg-accent px-4 py-2 font-semibold text-ink hover:bg-accent-hover"
           >
             Back to the map
           </Link>

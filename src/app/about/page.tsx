@@ -40,7 +40,7 @@ export default function AboutPage() {
           The browser receives those changes over Server-Sent Events. SSE is
           the right fit because the traffic is one-directional and it reconnects
           by itself, sending a <code className="font-mono text-sm">Last-Event-ID</code>{" "}
-          header that the server treats as a resume offset — so a dropped
+          header that the server treats as a resume offset, so a dropped
           connection does not drop observations.
         </p>
 
@@ -55,8 +55,8 @@ export default function AboutPage() {
           So the flipping glyphs sit inside{" "}
           <code className="font-mono text-sm">aria-hidden</code>, and the real
           values are announced from a single polite live region once the rows
-          have settled — batched into one sentence, because twelve regions
-          updating at once would otherwise mean twelve interruptions. If you
+          have settled. They are batched into one sentence, because twelve
+          regions updating at once would otherwise mean twelve interruptions. If you
           have asked your system to reduce motion, the flaps do not cycle at
           all: values change straight to their target.
         </p>
@@ -68,7 +68,7 @@ export default function AboutPage() {
 
         <H2>Colour</H2>
         <p className="mt-3 text-ink-soft">
-          The sheet is printed in brass and coral on midnight teal. Every
+          The sheet is printed in brass and deep red on midnight teal. Every
           colour that carries text was measured against both page surfaces
           before it went in: nothing textual sits below 4.5:1, and most is
           above 7:1. Body copy is 14.3:1, secondary copy 8.8:1, and the brass
@@ -82,7 +82,7 @@ export default function AboutPage() {
           measured at full opacity instead. The contour lines and the map&apos;s
           land fill are the deliberate exceptions: both are low-contrast
           texture inside aria-hidden nodes, and no information is encoded in
-          either — the coastline is drawn in brass at 7.1:1 against the water,
+          either. The coastline is drawn in brass at 7.1:1 against the water,
           and every region on the plot is also a text entry in the list below
           it.
         </p>
@@ -91,7 +91,7 @@ export default function AboutPage() {
           is checked rather than exempted. A single thread of the weave is the
           lightest surface anything on this site can land on, and body copy
           still reads 8:1 against it. All of this runs as a script over the
-          stylesheet —{" "}
+          stylesheet:{" "}
           <code className="font-mono text-sm">npm run check:contrast</code>{" "}
           parses the tokens out of the CSS, composites every alpha, and exits
           non-zero if a single pairing slips. Contrast claims rot otherwise.
@@ -108,7 +108,7 @@ export default function AboutPage() {
         <p className="mt-10">
           <Link
             href="/"
-            className="font-mono text-xs uppercase tracking-wider text-accent-bright underline"
+            className="font-mono text-xs uppercase tracking-wider text-brass underline"
           >
             ← Back to the map
           </Link>

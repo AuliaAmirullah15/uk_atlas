@@ -17,7 +17,7 @@ import type { Observation } from "@/lib/weather/observations";
  * navigation and header association for free. A grid of <div>s would
  * look identical and navigate far worse.
  *
- * Announcement strategy — one polite live region for the whole board,
+ * Announcement strategy: one polite live region for the whole board,
  * not one per row. Twelve independent live regions firing on the same
  * poll would queue twelve interruptions. Instead each settled row is
  * folded into a single sentence and the region announces the batch.
@@ -29,7 +29,7 @@ const STALE_AFTER_SECONDS = 20 * 60;
    A coarse clock.
 
    Staleness depends on wall-clock time, which makes it impure render
-   data — reading Date.now() during render is exactly the sort of thing
+   data. Reading Date.now() during render is exactly the sort of thing
    that breaks under concurrent rendering. Reading it as an external
    store fixes that, and the value is quantised to whole minutes so
    getSnapshot stays referentially stable between ticks (returning a
@@ -73,7 +73,7 @@ function StatusPill({
     connecting: { label: "Connecting", dot: "bg-amber" },
     live: { label: "Live", dot: "bg-woodland" },
     paused: { label: "Paused", dot: "bg-ink-soft" },
-    error: { label: "Reconnecting", dot: "bg-accent" },
+    error: { label: "Reconnecting", dot: "bg-accent-edge" },
   };
   const { label, dot } = copy[status];
 
@@ -110,7 +110,7 @@ function BoardRow({
     observation !== undefined &&
     nowSeconds - observation.observedAtEpoch > STALE_AFTER_SECONDS;
 
-  // Placeholder glyphs while the first poll lands — a real board's blanks.
+  // Placeholder glyphs while the first poll lands, as on a real board.
   const temp = observation ? `${observation.tempC}°` : "--°";
   const wind = observation ? `${observation.windKph}` : "--";
   const condition = observation?.conditionLabel ?? "Awaiting data";
@@ -128,7 +128,7 @@ function BoardRow({
     <tr
       /*
         aria-current marks the linked row for assistive tech, so the
-        map↔board connection is not conveyed by the coral edge alone.
+        map↔board connection is not conveyed by the claret edge alone.
       */
       aria-current={highlighted ? "true" : undefined}
       className={`border-b border-board-rule/60 transition-colors last:border-0 ${
@@ -138,7 +138,7 @@ function BoardRow({
       <th
         scope="row"
         className={`py-2 pr-3 text-left align-middle font-normal transition-shadow ${
-          highlighted ? "shadow-[inset_3px_0_0_0_var(--color-accent)] pl-2" : ""
+          highlighted ? "shadow-[inset_3px_0_0_0_var(--color-accent-edge)] pl-2" : ""
         }`}
       >
         <Link

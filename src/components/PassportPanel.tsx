@@ -6,7 +6,7 @@ import { REGIONS } from "@/lib/regions";
 import { usePassport } from "@/hooks/usePassport";
 
 /**
- * The passport panel — a rubber-stamp collection of the regions you have
+ * The passport panel: a rubber-stamp collection of the regions you have
  * looked at.
  *
  * Accessibility notes:
@@ -35,14 +35,14 @@ export function PassportPanel() {
           Passport
         </h2>
         <p className="font-mono text-xs text-ink-soft">
-          <span className="font-bold text-accent-bright">{collected}</span> of{" "}
+          <span className="font-bold text-brass">{collected}</span> of{" "}
           {total} collected
         </p>
       </div>
 
       <p className="mt-2 text-sm text-ink-soft">
         {complete
-          ? "All twelve. You have read the entire sheet — go outside."
+          ? "All twelve. You have read the entire sheet. Go outside."
           : "Open a region page to stamp it. Saved on this device only, no account involved."}
       </p>
 
@@ -56,7 +56,7 @@ export function PassportPanel() {
                 href={`/region/${region.slug}`}
                 className={`relative flex h-full flex-col justify-between gap-1 overflow-hidden rounded-md border-2 px-3 py-2 transition-colors ${
                   stamped
-                    ? "border-accent bg-paper"
+                    ? "border-accent-edge bg-paper"
                     : "border-dashed border-rule bg-paper/50 hover:border-rule-strong"
                 }`}
               >
@@ -73,7 +73,7 @@ export function PassportPanel() {
                     {/* The stamp. Decorative; the text below carries it. */}
                     <span
                       aria-hidden="true"
-                      className="pointer-events-none absolute -top-1 -right-3 -rotate-12 rounded-sm border-2 border-accent/70 px-2 py-0.5 font-mono text-[0.5rem] font-bold uppercase tracking-widest text-accent/70"
+                      className="pointer-events-none absolute -top-1 -right-3 -rotate-12 rounded-sm border-2 border-brass px-2 py-0.5 font-mono text-[0.5rem] font-bold uppercase tracking-widest text-brass"
                     >
                       Visited
                     </span>
@@ -84,7 +84,7 @@ export function PassportPanel() {
                             month: "short",
                           })
                         : ""}
-                      <span className="sr-only"> — visited</span>
+                      <span className="sr-only">, visited</span>
                     </span>
                   </>
                 ) : (
@@ -102,7 +102,7 @@ export function PassportPanel() {
         <button
           type="button"
           onClick={reset}
-          className="mt-4 rounded-md border border-rule px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-ink-soft transition-colors hover:border-accent hover:text-accent-bright"
+          className="mt-4 rounded-md border border-rule px-3 py-1.5 font-mono text-xs uppercase tracking-wider text-ink-soft transition-colors hover:border-accent-edge hover:text-brass"
         >
           Clear all {collected} stamps
         </button>
@@ -115,7 +115,7 @@ export function PassportPanel() {
  * Drop into a region page to record the visit. Renders nothing.
  *
  * Split out as its own component so the region page itself stays a server
- * component and continues to prerender — only this leaf needs to be
+ * component and continues to prerender. Only this leaf needs to be
  * client-side.
  */
 export function StampOnVisit({ slug }: { slug: string }) {

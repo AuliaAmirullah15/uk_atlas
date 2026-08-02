@@ -7,7 +7,7 @@ import { REGIONS } from "@/lib/regions";
 /**
  * The passport: which regions you have looked at, stamped on the sheet.
  *
- * Local to the device by design — there are no accounts here, and adding a
+ * Local to the device by design: there are no accounts here, and adding a
  * backend to store "pages you visited" would be a lot of privacy surface
  * for a collectathon. The UI says so plainly rather than implying a
  * synced profile.

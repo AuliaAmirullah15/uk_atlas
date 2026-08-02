@@ -62,11 +62,14 @@ export default async function RegionPage({
 
       <SiteHeader />
 
-      <main id="main" className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6">
+      <main
+        id="main"
+        className="mx-auto w-full max-w-5xl flex-1 px-4 py-8 sm:px-6"
+      >
         <nav aria-label="Breadcrumb" className="mb-6">
           <Link
             href="/"
-            className="font-mono text-xs uppercase tracking-wider text-ink-soft hover:text-accent-bright hover:underline"
+            className="font-mono text-xs uppercase tracking-wider text-ink-soft hover:text-brass hover:underline"
           >
             ← Back to the map
           </Link>
@@ -88,16 +91,16 @@ export default async function RegionPage({
               {region.blurb}
             </p>
 
-            <p className="mt-5 border-l-4 border-accent pl-3 text-sm">
+            <p className="mt-5 border-l-4 border-accent-edge pl-3 text-sm">
               <span className="font-semibold text-ink">
                 &ldquo;{region.phrase.text}&rdquo;
               </span>{" "}
-              <span className="text-ink-soft">— {region.phrase.gloss}</span>
+              <span className="text-ink-soft">({region.phrase.gloss})</span>
             </p>
           </div>
         </header>
 
-        {/* items-start so panels hug their content — the festivals and
+        {/* items-start so panels hug their content, because the festivals and
             landmarks lists are much shorter than the food list, and
             equal-height cards leave them with dead space. */}
         <div className="mt-8 grid grid-cols-1 items-start gap-5 lg:grid-cols-2">
@@ -154,21 +157,22 @@ export default async function RegionPage({
                 <dt className="text-xs uppercase tracking-wider text-ink-soft">
                   Latitude
                 </dt>
-                <dd className="ml-0 mt-1 text-ink">{region.lat.toFixed(4)}°N</dd>
+                <dd className="ml-0 mt-1 text-ink">
+                  {region.lat.toFixed(4)}°N
+                </dd>
               </div>
               <div>
                 <dt className="text-xs uppercase tracking-wider text-ink-soft">
                   Longitude
                 </dt>
                 <dd className="ml-0 mt-1 text-ink">
-                  {Math.abs(region.lon).toFixed(4)}°
-                  {region.lon < 0 ? "W" : "E"}
+                  {Math.abs(region.lon).toFixed(4)}°{region.lon < 0 ? "W" : "E"}
                 </dd>
               </div>
             </dl>
             <p className="mt-4 text-xs text-ink-soft">
-              These coordinates are what the departure board sends to
-              Open-Meteo for this region.
+              These coordinates are what the departure board sends to Open-Meteo
+              for this region.
             </p>
           </Panel>
         </div>

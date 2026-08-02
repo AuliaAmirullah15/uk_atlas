@@ -2,7 +2,7 @@ export function SiteFooter() {
   return (
     <footer className="mt-16 bg-paper-alt">
       {/* Mirrors the masthead rule, flipped, so the page closes the way it
-          opened. Decorative — it separates nothing that is not already a
+          opened. Decorative: it separates nothing that is not already a
           landmark region. */}
       <div aria-hidden="true" className="deco-rule rotate-180" />
 
@@ -11,7 +11,7 @@ export function SiteFooter() {
           Weather data from{" "}
           <a
             href="https://open-meteo.com/"
-            className="font-semibold text-accent-bright underline underline-offset-2"
+            className="font-semibold text-brass underline underline-offset-2"
             target="_blank"
             rel="noopener noreferrer"
           >

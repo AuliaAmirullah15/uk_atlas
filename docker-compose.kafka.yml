@@ -1,6 +1,6 @@
 # Phase 2 broker. Redpanda rather than Apache Kafka: it speaks the same
 # wire protocol, needs no ZooKeeper/KRaft ceremony, and starts in seconds
-# on a laptop — which matters when the broker is a portfolio detail rather
+# on a laptop, which matters when the broker is a portfolio detail rather
 # than the product.
 #
 #   docker compose -f docker-compose.kafka.yml up -d

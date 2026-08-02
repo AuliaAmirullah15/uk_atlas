@@ -3,7 +3,7 @@
  * "WHICH REGION SUITS YOU?"
  * ============================================================
  * A recommender, not a personality test. Every question asks what the
- * *visitor* wants — landscape, pace, food, weather tolerance — and the
+ * *visitor* wants (landscape, pace, food, weather tolerance) and the
  * options weight regions by what those places actually offer.
  *
  * That framing is deliberate. A quiz that told you "you're Yorkshire:
@@ -12,7 +12,7 @@
  * terrain, food and events keeps the claims checkable and the joke
  * pointed at scenery rather than at anyone's personality.
  *
- * Weights are 0–3 and deliberately overlapping: several regions can
+ * Weights are 0 to 3 and deliberately overlapping: several regions can
  * legitimately answer "I want mountains", and a recommender that pretends
  * otherwise is just a lookup table wearing a costume.
  */
@@ -30,7 +30,7 @@ export type QuizOption = {
 
 export type QuizQuestion = {
   id: string;
-  /** The legend for the fieldset — must read as a full question. */
+  /** The legend for the fieldset. Must read as a full question. */
   prompt: string;
   options: QuizOption[];
 };
@@ -54,7 +54,7 @@ export const QUESTIONS: QuizQuestion[] = [
       },
       {
         id: "coast",
-        label: "Coastline — cliffs, harbours, cold water",
+        label: "Coastline: cliffs, harbours, cold water",
         weights: {
           "south-west-england": 3,
           "northern-ireland": 3,
@@ -197,7 +197,7 @@ export const QUESTIONS: QuizQuestion[] = [
     options: [
       {
         id: "city",
-        label: "Proper city — noise, transport, options",
+        label: "Proper city: noise, transport, options",
         weights: {
           london: 3,
           "west-midlands": 3,
@@ -258,7 +258,7 @@ export const QUESTIONS: QuizQuestion[] = [
       },
       {
         id: "indoors",
-        label: "Doesn't matter — I'll mostly be indoors",
+        label: "Doesn't matter. I'll mostly be indoors",
         weights: {
           london: 3,
           "west-midlands": 2,
@@ -286,7 +286,7 @@ export const QUESTIONS: QuizQuestion[] = [
       },
       {
         id: "gig",
-        label: "A proper venue — theatre, gig, opera, whatever",
+        label: "A proper venue: theatre, gig, opera, whatever",
         weights: {
           london: 3,
           "north-west-england": 3,
@@ -356,7 +356,9 @@ export function scoreAnswers(answers: QuizAnswers): ScoredRegion[] {
     match: 0,
   }));
 
-  scored.sort((a, b) => b.score - a.score || a.region.name.localeCompare(b.region.name));
+  scored.sort(
+    (a, b) => b.score - a.score || a.region.name.localeCompare(b.region.name),
+  );
 
   const best = scored[0]?.score ?? 0;
   return scored.map((entry) => ({

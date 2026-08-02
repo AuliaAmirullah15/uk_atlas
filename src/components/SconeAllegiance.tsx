@@ -7,7 +7,7 @@ import { createLocalStore, useLocalStore } from "@/lib/store";
  *
  * Note what this deliberately is *not*: a poll with a national tally.
  * There is no backend, so any "68% of Britain says jam first" figure would
- * be a number I made up and dressed as data — on a site that is otherwise
+ * be a number I made up and dressed as data, on a site that is otherwise
  * careful to say where its facts come from. So it records your allegiance,
  * tells you which county you have sided with, and says plainly that it is
  * stored on your device.
@@ -57,7 +57,7 @@ export function SconeAllegiance() {
         A radiogroup rather than two independent buttons: these are mutually
         exclusive options with a current value, which is exactly what radio
         semantics describe. aria-checked carries the state, so it is never
-        conveyed by the coral border alone.
+        conveyed by the burgundy fill alone.
       */}
       <div
         role="radiogroup"
@@ -75,7 +75,7 @@ export function SconeAllegiance() {
               onClick={() => setChoice(selected ? null : option)}
               className={`rounded-md border-2 px-5 py-2.5 font-semibold transition-colors ${
                 selected
-                  ? "border-accent bg-accent text-paper"
+                  ? "border-brass-dim bg-accent text-ink"
                   : "border-rule bg-paper text-ink hover:border-rule-strong"
               }`}
             >

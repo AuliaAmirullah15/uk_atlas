@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 
 /**
  * ============================================================
- * SPLIT-FLAP TEXT — THE ACCESSIBILITY PROBLEM
+ * SPLIT-FLAP TEXT: THE ACCESSIBILITY PROBLEM
  * ============================================================
  * A split-flap board works by cycling each character through a drum
  * until it reaches its target glyph. Rendered naively, that is an
@@ -17,7 +17,7 @@ import { useEffect, useRef, useState, useSyncExternalStore } from "react";
  *  1. The animated glyphs live inside `aria-hidden`. Assistive tech
  *     never sees a single intermediate frame.
  *  2. The real value is announced once, from a polite live region owned
- *     by the parent board — after the row has settled, not during.
+ *     by the parent board, after the row has settled, not during.
  *  3. `prefers-reduced-motion` is honoured in JS, not just CSS. Killing
  *     the CSS animation alone would still leave the glyph *sequence*
  *     running, which is the part that actually causes trouble. Reduced
@@ -103,7 +103,7 @@ export function SplitFlap({
   /*
     The glyphs currently on the drum. Kept in a ref as well as state
     because the animation effect needs to read where it is starting from
-    without listing `cells` as a dependency — which would restart the
+    without listing `cells` as a dependency, which would restart the
     animation on every frame it produces.
   */
   const cellsRef = useRef<string[]>(target.split(""));
@@ -137,7 +137,7 @@ export function SplitFlap({
 
       const fromIndex = Math.max(CHARSET.indexOf(fromChar), 0);
       const toIndex = Math.max(CHARSET.indexOf(toChar), 0);
-      // Always travel forward through the drum, wrapping — that is how a
+      // Always travel forward through the drum, wrapping. That is how a
       // real board behaves, and it keeps the motion coherent.
       const distance = (toIndex - fromIndex + CHARSET.length) % CHARSET.length;
 
@@ -161,7 +161,7 @@ export function SplitFlap({
     });
 
     if (longest === 0) {
-      // Already showing the target — settle without touching state.
+      // Already showing the target, so settle without touching state.
       settledRef.current?.(target.trim());
     } else {
       timers.push(
@@ -175,7 +175,7 @@ export function SplitFlap({
     return () => timers.forEach(clearTimeout);
   }, [target, width, reducedMotion, align]);
 
-  // Under reduced motion the target is authoritative — no cycling state.
+  // Under reduced motion the target is authoritative, so there is no cycling state.
   const displayed = reducedMotion ? target.split("") : cells;
   const glyphColour = tone === "amber" ? "text-amber" : "text-flap";
 
@@ -187,7 +187,7 @@ export function SplitFlap({
           key={index}
           /*
             os-flap-face is the top-lit gradient a real drum has: highlight
-            above the seam, shadow below it. Purely a surface treatment — the
+            above the seam, shadow below it. Purely a surface treatment; the
             glyph colour is set from the token, not from the gradient.
           */
           className={`os-flap-seam os-flap-face relative inline-flex h-7 w-[0.95rem] items-center justify-center rounded-xs bg-board-card font-mono text-[0.8rem] font-semibold tabular-nums ${glyphColour} ${

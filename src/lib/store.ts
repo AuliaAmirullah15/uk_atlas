@@ -7,8 +7,8 @@ import { useCallback, useSyncExternalStore } from "react";
  * A TINY LOCALSTORAGE-BACKED STORE
  * ============================================================
  * Both the passport and the scone allegiance need state that survives a
- * reload but has no business on a server. The naive version —
- * `useState` + a `useEffect` that reads localStorage — has two problems:
+ * reload but has no business on a server. The naive version,
+ * `useState` plus a `useEffect` that reads localStorage, has two problems:
  *
  *  1. It writes state synchronously inside an effect, which cascades an
  *     extra render before paint (and this project's lint rules reject it).
@@ -17,7 +17,7 @@ import { useCallback, useSyncExternalStore } from "react";
  *
  * `useSyncExternalStore` is built for exactly this: an explicit server
  * snapshot keeps hydration honest, and subscribers update without an
- * effect. The cached snapshot matters — `getSnapshot` must return a
+ * effect. The cached snapshot matters, because `getSnapshot` must return a
  * referentially stable value between changes or React re-renders forever.
  */
 

@@ -1,5 +1,5 @@
 /**
- * The twelve ITL 1 statistical regions of the United Kingdom — the same
+ * The twelve ITL 1 statistical regions of the United Kingdom: the same
  * carve-up the ONS uses, so the geography is defensible rather than vibes.
  *
  * `lat`/`lon` are the representative settlement for each region and are what
@@ -12,14 +12,14 @@ export type Region = {
   /** Shown on the departure board, which is width-constrained. */
   boardName: string;
   nation: "England" | "Scotland" | "Wales" | "Northern Ireland";
-  /** Representative settlement — the weather station stand-in. */
+  /** Representative settlement, i.e. the weather station stand-in. */
   city: string;
   lat: number;
   lon: number;
   /**
    * Which side of the pin its label sits on. Position comes from `lat`/`lon`
-   * via the shared projection; this only keeps adjacent labels — Cardiff and
-   * Bristol, Leeds and Manchester — from colliding.
+   * via the shared projection; this only keeps adjacent labels (Cardiff and
+   * Bristol, Leeds and Manchester) from colliding.
    */
   labelSide: "left" | "right" | "above" | "below";
   blurb: string;
@@ -112,7 +112,7 @@ export const REGIONS: Region[] = [
       { name: "Stottie cake", note: "Dense flat loaf, best filled with ham and pease pudding." },
       { name: "Pease pudding", note: "Split yellow peas, slow-cooked to a savoury paste." },
       { name: "Craster kipper", note: "Oak-smoked herring, smoked in the village since 1856." },
-      { name: "Singin' hinnies", note: "Griddle scones that sizzle — hence the name." },
+      { name: "Singin' hinnies", note: "Griddle scones that sizzle, hence the name." },
     ],
     festivals: [
       { name: "Great North Run", when: "September", where: "Newcastle to South Shields" },
@@ -241,7 +241,7 @@ export const REGIONS: Region[] = [
     food: [
       { name: "Melton Mowbray pork pie", note: "Hand-raised, grey-pink inside, PGI protected." },
       { name: "Stilton", note: "Only six dairies in the world may legally make it." },
-      { name: "Bakewell pudding", note: "The original — flaky pastry and almond custard, not a tart." },
+      { name: "Bakewell pudding", note: "The original: flaky pastry and almond custard, not a tart." },
       { name: "Lincolnshire sausage", note: "Heavy on the sage." },
       { name: "Red Leicester", note: "Coloured with annatto, matured for a firm bite." },
     ],
@@ -335,7 +335,7 @@ export const REGIONS: Region[] = [
     labelSide: "below",
     blurb:
       "Chalk cliffs, hop gardens, and a seaside city with an onion-domed royal palace that looks like it took a wrong turn from Rajasthan.",
-    phrase: { text: "DFL", gloss: "Down From London — said of weekenders" },
+    phrase: { text: "DFL", gloss: "Down From London, said of weekenders" },
     food: [
       { name: "Whitstable oyster", note: "Celebrated with its own July festival." },
       { name: "Banoffee pie", note: "Invented at The Hungry Monk in Jevington, East Sussex, 1971." },
@@ -370,12 +370,12 @@ export const REGIONS: Region[] = [
     labelSide: "right",
     blurb:
       "Neolithic stone circles, Roman plumbing, a 95-mile fossil coastline, and the two most contested scones in Britain.",
-    phrase: { text: "Alright my lover", gloss: "hello, friend — entirely platonic" },
+    phrase: { text: "Alright my lover", gloss: "hello, friend (entirely platonic)" },
     food: [
       { name: "Cornish pasty", note: "Crimped on the side, PGI protected, beef and swede inside." },
       { name: "Cream tea", note: "Cornwall: jam then cream. Devon: cream then jam. Choose carefully." },
       { name: "Clotted cream", note: "Minimum 55% butterfat. A legal definition worth respecting." },
-      { name: "West Country Farmhouse Cheddar", note: "PDO — made within four counties only." },
+      { name: "West Country Farmhouse Cheddar", note: "PDO: made within four counties only." },
       { name: "Stargazy pie", note: "Pilchard heads poking through the crust, Mousehole, 23 December." },
     ],
     festivals: [
@@ -407,7 +407,7 @@ export const REGIONS: Region[] = [
     food: [
       { name: "Cawl", note: "Lamb and leek broth. The national dish." },
       { name: "Welsh rarebit", note: "A proper cheese sauce with ale and mustard, grilled onto toast." },
-      { name: "Bara brith", note: "'Speckled bread' — tea-soaked fruit loaf." },
+      { name: "Bara brith", note: "'Speckled bread', a tea-soaked fruit loaf." },
       { name: "Laverbread", note: "Boiled laver seaweed, rolled in oats and fried with cockles." },
       { name: "Glamorgan sausage", note: "Caerphilly cheese, leek and breadcrumbs. No meat." },
     ],

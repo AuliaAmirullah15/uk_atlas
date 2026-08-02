@@ -2,7 +2,7 @@
  * Open-Meteo client + the producer that feeds the event bus.
  *
  * Honest note on "live": Open-Meteo is a plain REST API with no push
- * channel, and its `current` block carries `interval: 900` — upstream
+ * channel, and its `current` block carries `interval: 900`, so upstream
  * data only changes every ~15 minutes. So this is a poller, not a
  * firehose. We poll every 60s for board responsiveness and publish only
  * when a value actually changed, which keeps the flaps from flipping to
@@ -62,7 +62,7 @@ function endpoint(): string {
     current: "temperature_2m,weather_code,wind_speed_10m,is_day",
     wind_speed_unit: "kmh",
     timezone: "Europe/London",
-    // Unambiguous timestamps — see the note on Observation.observedAtEpoch.
+    // Unambiguous timestamps; see the note on Observation.observedAtEpoch.
     timeformat: "unixtime",
   });
   return `https://api.open-meteo.com/v1/forecast?${params}`;

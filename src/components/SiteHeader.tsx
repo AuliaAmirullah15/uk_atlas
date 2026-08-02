@@ -2,8 +2,8 @@ import Link from "next/link";
 
 /*
   The masthead. A Deco poster header is a stack of rules of differing
-  weight, not one heavy border, so the bottom edge is a .deco-rule —
-  thick brass line, hairline gap, thin brass line — rather than the single
+  weight, not one heavy border, so the bottom edge is a .deco-rule
+  (thick brass line, hairline gap, thin brass line) rather than the single
   chunky band a `border-b-4` gives you.
 */
 

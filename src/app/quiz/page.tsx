@@ -14,14 +14,17 @@ export default function QuizPage() {
     <>
       <SiteHeader />
 
-      <main id="main" className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6">
+      <main
+        id="main"
+        className="mx-auto w-full max-w-3xl flex-1 px-4 py-8 sm:px-6"
+      >
         <h1 className="font-display text-4xl font-semibold tracking-tight text-ink sm:text-5xl">
           Which region suits you?
         </h1>
         <p className="mt-4 max-w-prose text-ink-soft">
-          Six questions about what you actually want from a trip — landscape,
-          pace, food, and how much rain you will tolerate. The board flaps
-          round to the answer.
+          Six questions about what you actually want from a trip ranging from
+          landscape, pace, food, and how much rain you will tolerate. The board
+          flaps round to the answer.
         </p>
         <p className="mt-2 max-w-prose text-sm text-ink-soft">
           It weights regions by what those places offer, not by what people

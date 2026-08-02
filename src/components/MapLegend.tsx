@@ -13,15 +13,14 @@
 const ENTRIES: { swatch: React.ReactNode; label: string }[] = [
   {
     swatch: (
-      <span className="h-2.5 w-2.5 rounded-full border-2 border-paper bg-accent" />
+      <span className="h-2.5 w-2.5 rounded-full border-2 border-brass bg-accent-edge" />
     ),
-    label: "Region — select for detail",
+    label: "Region: select for detail",
   },
   {
+    // Matches the stamped pin on the plot: solid gold, one size larger.
     swatch: (
-      <span className="relative h-2.5 w-2.5 rounded-full border-2 border-accent bg-paper">
-        <span className="absolute -top-1 -right-1 block h-2 w-2 rounded-full bg-accent" />
-      </span>
+      <span className="h-3 w-3 rounded-full border-2 border-brass bg-brass" />
     ),
     label: "Visited (stamped in your passport)",
   },
@@ -33,13 +32,13 @@ const ENTRIES: { swatch: React.ReactNode; label: string }[] = [
   },
   {
     swatch: (
-      <span className="h-0 w-5 border-t-2 border-dashed border-accent-bright" />
+      <span className="h-0 w-5 border-t-2 border-dashed border-accent-edge" />
     ),
     label: "UK border with Ireland, approximate",
   },
   {
     swatch: <span className="h-0 w-5 border-t border-contour" />,
-    label: "Relief shading — decorative, not surveyed",
+    label: "Relief shading: decorative, not surveyed",
   },
   {
     swatch: <span className="h-0 w-5 border-t border-grid" />,
@@ -75,7 +74,7 @@ export function MapLegend() {
  *
  * Deliberately latitude/longitude and *not* an OS National Grid reference
  * (the "TQ 3080 8040" format). A real grid reference needs an OSGB36 datum
- * shift and a Transverse Mercator projection — a genuine coordinate
+ * shift and a Transverse Mercator projection, i.e. a genuine coordinate
  * transform, not a formatting trick. Printing a plausible-looking pair of
  * letters and digits would be inventing data on a page that is otherwise
  * careful about it, so this shows the coordinates we actually have.

@@ -1,6 +1,6 @@
 /**
  * ============================================================
- * PHASE 2 — KAFKA IMPLEMENTATION OF `EventBus`
+ * PHASE 2: KAFKA IMPLEMENTATION OF `EventBus`
  * ============================================================
  * Shipped as `.example` on purpose: it needs `kafkajs`, and phase 1
  * should install and build with zero broker dependencies. Nothing in
@@ -23,7 +23,7 @@
  * ------------------------------------------------------------
  * Kafka's protocol runs over raw TCP. A browser cannot open a raw TCP
  * socket, so there is no such thing as connecting a page directly to a
- * broker — every "Kafka in the browser" setup is a server bridge, and
+ * broker. Every "Kafka in the browser" setup is a server bridge, and
  * this file is ours. Anyone claiming otherwise is describing a proxy.
  *
  * ------------------------------------------------------------
@@ -77,7 +77,7 @@ export class KafkaEventBus implements EventBus {
     this.ready ??= (async () => {
       await this.producer.connect();
 
-      // Unique group per process — see the note above on why.
+      // Unique group per process; see the note above on why.
       const groupId = `uk-atlas-bridge-${process.pid}-${Date.now()}`;
       this.consumer = this.kafka.consumer({ groupId });
       await this.consumer.connect();

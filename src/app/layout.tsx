@@ -11,8 +11,8 @@ import "./globals.css";
   hairline faces that go illegible below 24px. opsz is pinned high so the
   headings get the display cut's sharper contrast.
 
-  Karla for prose. A grotesque with a tall x-height and open apertures —
-  the openness is what keeps body copy comfortable on a dark ground, where
+  Karla for prose. A grotesque with a tall x-height and open apertures.
+  That openness is what keeps body copy comfortable on a dark ground, where
   a tighter face fills in and starts to glow.
 
   IBM Plex Mono for the board and every OS-style label. A monospace with
@@ -43,7 +43,7 @@ const plexMono = IBM_Plex_Mono({
 
 export const metadata: Metadata = {
   title: {
-    default: "The Contour Atlas — A Field Guide to the UK",
+    default: "The Contour Atlas: A Field Guide to the UK",
     template: "%s | The Contour Atlas",
   },
   description:

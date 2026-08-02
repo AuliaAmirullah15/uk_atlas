@@ -4,7 +4,7 @@
  * ============================================================
  * The map is stylised, but it is not invented: the coastline and the
  * region pins are projected through the *same* function from real
- * latitude/longitude. That is the point — hand-tuned percentage
+ * latitude/longitude. That is the point. Hand-tuned percentage
  * positions drift out of agreement with the outline the moment either
  * is touched, whereas a shared projection cannot disagree with itself.
  *
@@ -39,9 +39,9 @@ export function project(lat: number, lon: number): { x: number; y: number } {
 
 /**
  * Inverse of `project`, for turning a pointer position back into
- * coordinates. Takes fractions of the plot area (0–1) rather than viewBox
+ * coordinates. Takes fractions of the plot area (0 to 1) rather than viewBox
  * units, because that is what a pointer event gives you after dividing by
- * the element's rendered size — which is not the viewBox size.
+ * the element's rendered size, which is not the viewBox size.
  */
 export function unproject(
   xFraction: number,
@@ -66,7 +66,7 @@ function toPath(coords: Coord[], close = true): string {
 
 /*
   Great Britain, clockwise from Cape Wrath. Headlands and estuary mouths
-  only — the west coast of Scotland in particular is radically simplified,
+  only. The west coast of Scotland in particular is radically simplified,
   because at this scale every sea loch would read as noise.
 */
 const GREAT_BRITAIN: Coord[] = [
@@ -153,7 +153,7 @@ const GREAT_BRITAIN: Coord[] = [
 /*
   Ireland. Only Northern Ireland is in this atlas, but drawing the island
   truncated at the border would be a lie about the geography, so the whole
-  island is drawn and simply runs off the western edge of the sheet — the
+  island is drawn and simply runs off the western edge of the sheet. The
   way a real OS sheet ends mid-landmass.
 */
 const IRELAND: Coord[] = [
@@ -193,7 +193,7 @@ const NI_BORDER: Coord[] = [
 
 /*
   Internal nation borders, simplified. Without these, Wales and Scotland
-  are invisible as places — the outline alone reads as one undifferentiated
+  are invisible as places, because the outline alone reads as one undifferentiated
   island, which rather undercuts an atlas organised by nation and region.
 */
 const SCOTLAND_ENGLAND_BORDER: Coord[] = [
@@ -225,7 +225,7 @@ export const WALES_BORDER_PATH = toPath(WALES_ENGLAND_BORDER, false);
 
 /**
  * National Grid ticks every whole degree, for the sheet margin.
- * Decorative — no data is read from them.
+ * Decorative: no data is read from them.
  */
 export function graticule(): { verticals: number[]; horizontals: number[] } {
   const verticals: number[] = [];

@@ -7,7 +7,7 @@ import { createContext, useContext, useMemo, useState } from "react";
  * pin on the map lights up the matching row on the departure board. It is
  * the one piece of state both halves of the home page need.
  *
- * Focus counts, not just hover — otherwise the connection between map and
+ * Focus counts, not just hover, because otherwise the connection between map and
  * board exists only for mouse users, which is precisely the kind of
  * mouse-only flourish this project is trying to avoid.
  */

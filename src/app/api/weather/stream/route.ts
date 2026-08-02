@@ -6,14 +6,14 @@
  *  - The data is one-directional (server -> board). A WebSocket's upstream
  *    channel would sit unused, and it buys a second protocol to operate.
  *  - SSE runs inside a Next.js Route Handler over plain HTTP. A WebSocket
- *    needs an HTTP upgrade, which App Router route handlers do not perform —
+ *    needs an HTTP upgrade, which App Router route handlers do not perform;
  *    it means a separate `ws` server process alongside Next.
  *  - SSE reconnects on its own, and its `Last-Event-ID` header maps exactly
  *    onto a Kafka consumer offset, which is what we want for phase 2.
  *
  * If bidirectional traffic ever lands (a user pinning regions server-side,
  * say), swapping to WebSocket means changing this file and the hook's
- * transport — the `EventBus` contract underneath is untouched.
+ * transport. The `EventBus` contract underneath is untouched.
  *
  * `force-dynamic` is required: a streaming response must never be
  * prerendered or cached.

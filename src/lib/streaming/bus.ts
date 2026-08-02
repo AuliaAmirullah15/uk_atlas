@@ -5,7 +5,7 @@
  * This is the whole point of the streaming design: the browser-facing
  * half of the app talks to `EventBus`, never to a concrete transport.
  * Phase 1 ships `LocalEventBus` (in-process). Phase 2 drops in a Kafka
- * implementation of this same interface and nothing above it changes —
+ * implementation of this same interface and nothing above it changes;
  * not the SSE route, not the React hook, not the board.
  *
  * The envelope deliberately mirrors a Kafka record so the migration is
@@ -37,14 +37,14 @@ export interface EventBus {
   /**
    * Subscribe to a topic. If `fromOffset` is given, any retained records
    * after that offset are replayed to the handler before live delivery
-   * begins — the SSE reconnect story.
+   * begins. This is the SSE reconnect story.
    */
   subscribe<T>(
     topic: string,
     handler: Handler<T>,
     fromOffset?: number,
   ): Unsubscribe;
-  /** Latest retained record per key — lets a new client paint immediately. */
+  /** Latest retained record per key, which lets a new client paint immediately. */
   snapshot<T>(topic: string): StreamEnvelope<T>[];
 }
 

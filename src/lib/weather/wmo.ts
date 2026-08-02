@@ -3,7 +3,7 @@
  *
  * `label` is written to fit a split-flap board (short, upper-case-friendly)
  * and is also what a screen reader announces, so it has to read as a real
- * phrase on its own — not an abbreviation only a pilot would parse.
+ * phrase on its own, not an abbreviation only a pilot would parse.
  */
 
 export type WmoDescriptor = {
@@ -49,7 +49,7 @@ export function describeWmo(code: number): WmoDescriptor {
 
 /**
  * The joke that writes itself on a British weather board. Purely cosmetic
- * flavour text — the real conditions are always shown alongside.
+ * flavour text; the real conditions are always shown alongside.
  */
 export function britishVerdict(code: number, tempC: number): string {
   if (code >= 95) return "Dramatic";

@@ -27,7 +27,7 @@ export default function Home() {
           corner brackets enter the accessibility tree or the text flow.
 
           The weave is masked down at the top so the eyebrow and headline sit
-          on clean cloth — the texture wants to be felt at the edges of the
+          on clean cloth. The texture wants to be felt at the edges of the
           card, not read through the words.
         */}
         <div className="deco-corners relative overflow-hidden rounded-lg border border-rule bg-paper-alt px-5 py-8 sm:px-10 sm:py-12">
@@ -48,13 +48,13 @@ export default function Home() {
             <p className="lede mt-5 max-w-2xl text-base text-ink-soft">
               Contour lines, brass hairlines, and a station board that will not
               stop telling you it is drizzling somewhere. Food, festivals and
-              landmarks for every region — plus live weather, streamed.
+              landmarks for every region, plus live weather.
             </p>
 
             <p className="mt-7">
               <Link
                 href="/quiz"
-                className="inline-block rounded-md bg-accent px-5 py-2.5 font-semibold text-paper transition-colors hover:bg-accent-bright"
+                className="inline-block rounded-md border border-brass-dim bg-accent px-5 py-2.5 font-semibold text-ink transition-colors hover:bg-accent-hover"
               >
                 Find the region that suits you →
               </Link>

@@ -1,7 +1,7 @@
 # The Contour Atlas
 
-A field guide to the twelve regions of the United Kingdom — food, festivals,
-landmarks and live weather — drawn in the style of an Ordnance Survey sheet.
+A field guide to the twelve regions of the United Kingdom: food, festivals,
+landmarks and live weather, drawn in the style of an Ordnance Survey sheet.
 The signature element is a station-style **split-flap departure board** fed by
 a live weather stream.
 
@@ -20,13 +20,13 @@ Worth being straight about this, because animation makes it easy to imply more
 than is true.
 
 **Open-Meteo has no push API.** It is plain REST, and the `current` block it
-returns carries `interval: 900` — upstream data changes about every 15 minutes.
+returns carries `interval: 900`, so upstream data changes about every 15 minutes.
 So there is no firehose to connect to. What exists is:
 
 - a server-side poller that requests **all twelve regions in one HTTP call**
   every 60 seconds (Open-Meteo accepts comma-joined coordinates and returns an
   array in input order), and
-- a **change filter** — only readings whose temperature, wind, condition code
+- a **change filter**: only readings whose temperature, wind, condition code
   or observation time actually moved get published, so the flaps do not flip to
   announce identical data.
 
@@ -63,7 +63,7 @@ Open-Meteo (REST, polled 60s)
 - The data is **one-directional** (server → board). A WebSocket's upstream
   channel would sit unused, and it is a second protocol to operate.
 - SSE runs inside a Next.js Route Handler over plain HTTP. A WebSocket needs an
-  HTTP upgrade, which App Router route handlers do not perform — it means
+  HTTP upgrade, which App Router route handlers do not perform. It means
   running a separate `ws` server process alongside Next.
 - SSE **reconnects on its own**, and its `Last-Event-ID` header maps exactly
   onto a Kafka consumer offset. Which brings us to:
@@ -115,7 +115,7 @@ export const bus: EventBus =
     : (globalForBus.__ukAtlasBus ??= new LocalEventBus());
 ```
 
-Nothing else changes — not the SSE route, not the hook, not the board.
+Nothing else changes: not the SSE route, not the hook, not the board.
 Redpanda console at <http://localhost:8080> to watch records land.
 
 ### Two things people get wrong about Kafka in the browser
@@ -128,7 +128,7 @@ browser" is describing a proxy.
 **2. Consumer groups will silently break your fan-out.** A consumer group
 distributes partitions *between* members. If every Next.js instance joined the
 same group, each browser would see only the regions whose partitions its
-instance happened to own — the opposite of a broadcast. The fix is a **unique
+instance happened to own, which is the opposite of a broadcast. The fix is a **unique
 group id per process**, which makes each instance a full independent reader.
 Its honest cost: group metadata accumulates per process, so set a short
 `offsetRetention` or reap idle groups if this runs beyond a demo.
@@ -138,7 +138,7 @@ The envelope was designed to mirror a Kafka record from the start:
 | Envelope | Kafka |
 | --- | --- |
 | `topic` | topic |
-| `key` | partition key (region slug — keeps a region's events ordered) |
+| `key` | partition key (region slug, which keeps a region's events ordered) |
 | `offset` | offset (and the SSE `id:` field) |
 | `timestamp` | record timestamp |
 | `value` | record value |
@@ -152,13 +152,13 @@ This was the priority, not a pass at the end.
 ### The split-flap problem
 
 A split-flap board reaches its target by cycling every character through a
-drum. Rendered naively, a screen reader announces **every intermediate frame** —
+drum. Rendered naively, a screen reader announces **every intermediate frame**.
 "Leeds" becomes several hundred utterances of alphabet soup. So:
 
 - The flipping glyphs are inside `aria-hidden`. Assistive tech never sees a
   single intermediate frame.
 - The real values are announced from **one** polite live region for the whole
-  board, once rows have **settled**. One region, not twelve — twelve live
+  board, once rows have **settled**. One region, not twelve. Twelve live
   regions firing on the same poll would queue twelve interruptions. Updates are
   debounced and batched into a single sentence, collapsing to
   "Weather updated for 8 regions" past a threshold.
@@ -166,7 +166,7 @@ drum. Rendered naively, a screen reader announces **every intermediate frame** �
   animation alone would still leave the glyph *sequence* running, which is the
   part that causes trouble. Under reduced motion the target renders directly.
 - There is a **real pause control** (WCAG 2.1 SC 2.2.2, Pause Stop Hide) and it
-  closes the stream rather than hiding updates — so a paused board is a quiet
+  closes the stream rather than hiding updates, so a paused board is a quiet
   one.
 
 ### Structure
@@ -175,7 +175,7 @@ drum. Rendered naively, a screen reader announces **every intermediate frame** �
   data, and a table gives row/column navigation and header association for
   free.
 - Map pins are real `<Link>`s in a `<ul>`, laid *over* the SVG rather than
-  drawn inside it — so tab order works with no roving-tabindex code, and links
+  drawn inside it, so tab order works with no roving-tabindex code, and links
   behave like links (middle-click, open-in-new-tab, copy address).
 - Because a stylised plot cannot convey precise geography, every region is
   **also** listed as plain text below the map. A peer, not a fallback.
@@ -186,7 +186,7 @@ drum. Rendered naively, a screen reader announces **every intermediate frame** �
 ### Colour
 
 Every colour carrying text was checked against the paper background *before*
-it went in — see the table at the top of
+it went in. See the table at the top of
 [`globals.css`](src/app/globals.css):
 
 | Pair | Ratio | |
@@ -202,7 +202,7 @@ it went in — see the table at the top of
 The contour brown *fails* text contrast, deliberately. It is only ever
 texture: no information is encoded in the contour lines or grid squares alone,
 and they live behind `aria-hidden` nodes. Status is never carried by colour
-alone — the connection dot always has a text label beside it (SC 1.4.1).
+alone: the connection dot always has a text label beside it (SC 1.4.1).
 
 ---
 
@@ -215,7 +215,7 @@ alone — the connection dot always has a text label beside it (SC 1.4.1).
   ([`lib/geo.ts`](src/lib/geo.ts)). Hand-tuned percentage positions drift out
   of agreement with the outline the moment either is touched; a shared
   projection cannot disagree with itself.
-- Projection is equirectangular with a cosine correction on longitude — without
+- Projection is equirectangular with a cosine correction on longitude. Without
   it, Britain comes out about 70% too wide at 54°N.
 - Ireland is drawn in full and runs off the western edge of the sheet, the way
   a real OS sheet ends mid-landmass. Only Northern Ireland is covered by the
@@ -237,5 +237,5 @@ into uselessness.
 ## Attribution
 
 Weather from [Open-Meteo](https://open-meteo.com/) (CC BY 4.0). An affectionate
-homage to Ordnance Survey cartography — not affiliated with or endorsed by
+homage to Ordnance Survey cartography, not affiliated with or endorsed by
 Ordnance Survey.# uk_atlas

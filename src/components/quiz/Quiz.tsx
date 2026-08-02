@@ -12,7 +12,7 @@ import { QuizResult } from "@/components/quiz/QuizResult";
  * *focus*, which is easy to get wrong in a multi-step form:
  *
  *  - Each question is a <fieldset> with a <legend>. That is what makes a
- *    screen reader read "What do you want out of the window? — radio
+ *    screen reader read "What do you want out of the window? Radio
  *    group, 1 of 4" instead of announcing four orphaned radios.
  *  - Native radio inputs, not divs with role="radio". Arrow-key cycling,
  *    grouping by `name`, and form semantics all come free.
@@ -22,7 +22,7 @@ import { QuizResult } from "@/components/quiz/QuizResult";
  *  - The result gets focus too, and is a real heading, so it is reachable
  *    and announced rather than silently swapped in below the fold.
  *  - Progress is text ("Question 3 of 6"), not just a coloured bar
- *    (SC 1.4.1 — never colour alone).
+ *    (SC 1.4.1: never colour alone).
  *
  * Selecting an option does NOT auto-advance. Auto-advance is hostile to
  * anyone using a screen reader or arrow keys, because moving through the
@@ -30,15 +30,15 @@ import { QuizResult } from "@/components/quiz/QuizResult";
  */
 
 /*
-  Fading a filled coral pill to 40% over midnight does not read as
-  "unavailable" — it reads as a muddy maroon slab that still looks
+  Fading a filled burgundy pill to 40% over midnight does not read as
+  "unavailable". It reads as a muddy smear that still looks
   pressable, and it drags the label down with it. A disabled primary
   instead drops the fill entirely and becomes an outline, which is
   unmistakably inert while keeping its label legible. (Disabled controls
   are exempt from SC 1.4.3, but there is no reason to make them illegible.)
 */
 const PRIMARY_BUTTON =
-  "rounded-md bg-accent px-5 py-2 font-semibold text-paper transition-colors hover:bg-accent-bright disabled:cursor-not-allowed disabled:border-2 disabled:border-rule disabled:bg-transparent disabled:text-ink-soft";
+  "rounded-md border border-brass-dim bg-accent px-5 py-2 font-semibold text-ink transition-colors hover:bg-accent-hover disabled:cursor-not-allowed disabled:border-2 disabled:border-rule disabled:bg-transparent disabled:text-ink-soft";
 
 const SECONDARY_BUTTON =
   "rounded-md border-2 border-rule px-4 py-2 font-semibold text-ink transition-colors hover:border-rule-strong";
@@ -125,7 +125,7 @@ export function Quiz() {
                 htmlFor={id}
                 className={`flex cursor-pointer items-start gap-3 rounded-md border-2 px-4 py-3 transition-colors ${
                   isChosen
-                    ? "border-accent bg-paper"
+                    ? "border-accent-edge bg-paper"
                     : "border-rule bg-paper hover:border-rule-strong"
                 }`}
               >
@@ -141,7 +141,7 @@ export function Quiz() {
                       [question.id]: option.id,
                     }))
                   }
-                  className="mt-1 h-4 w-4 shrink-0 accent-accent"
+                  className="mt-1 h-4 w-4 shrink-0 accent-accent-edge"
                 />
                 <span className="text-ink">{option.label}</span>
               </label>

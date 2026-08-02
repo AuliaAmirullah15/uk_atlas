@@ -13,7 +13,7 @@ import type { ScoredRegion } from "@/lib/quiz";
  *
  * Accessibility follows the same split as the departure board: the flaps
  * are decoration inside `aria-hidden`, and the result is stated in real
- * text immediately beneath — not announced *instead* of being written
+ * text immediately beneath, not announced *instead* of being written
  * down. The heading is the focus target handed down from <Quiz>, so a
  * keyboard user lands on the result rather than somewhere above it.
  */
@@ -49,7 +49,7 @@ export function QuizResult({
         You should go to {winner.region.name}
       </h2>
 
-      {/* The flap board. Decorative — the name is in the heading above. */}
+      {/* The flap board. Decorative; the name is in the heading above. */}
       <div className="mt-5 rounded-md bg-board p-4">
         <p className="font-mono text-[0.6rem] uppercase tracking-[0.2em] text-flap/50">
           Next departure
@@ -75,11 +75,11 @@ export function QuizResult({
 
       <p className="mt-5 max-w-prose text-ink-soft">{winner.region.blurb}</p>
 
-      <p className="mt-4 border-l-4 border-accent pl-3 text-sm">
+      <p className="mt-4 border-l-4 border-accent-edge pl-3 text-sm">
         <span className="font-semibold text-ink">
           &ldquo;{winner.region.phrase.text}&rdquo;
         </span>{" "}
-        <span className="text-ink-soft">— {winner.region.phrase.gloss}</span>
+        <span className="text-ink-soft">({winner.region.phrase.gloss})</span>
       </p>
 
       {/* Eat this, essentially. */}
@@ -121,7 +121,7 @@ export function QuizResult({
               <li key={entry.region.slug}>
                 <Link
                   href={`/region/${entry.region.slug}`}
-                  className="inline-flex items-baseline gap-2 rounded-full border border-rule bg-paper px-3 py-1 text-sm text-ink hover:border-accent"
+                  className="inline-flex items-baseline gap-2 rounded-full border border-rule bg-paper px-3 py-1 text-sm text-ink hover:border-accent-edge"
                 >
                   {entry.region.name}
                   <span className="font-mono text-[0.65rem] text-ink-soft">
@@ -138,7 +138,7 @@ export function QuizResult({
         <Link
           href={`/region/${winner.region.slug}`}
           onClick={() => stamp(winner.region.slug)}
-          className="rounded-md bg-accent px-5 py-2 font-semibold text-paper transition-colors hover:bg-accent-bright"
+          className="rounded-md border border-brass-dim bg-accent px-5 py-2 font-semibold text-ink transition-colors hover:bg-accent-hover"
         >
           Explore {winner.region.name}
         </Link>
